@@ -1,0 +1,50 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 500px;">
+  <div style="display: flex; gap: 8px;">
+    <button id="capture-btn" style="
+      padding: 12px 24px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      flex: 1;
+    ">
+      🖥️ Start Screen Capture
+    </button>
+    <button id="stop-btn" disabled style="
+      padding: 12px 24px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.5;
+    ">
+      ⏹️ Stop
+    </button>
+  </div>
+  
+  <div id="capture-info" style="font-size: 14px; color: #374151;">
+    Click to start capturing
+  </div>
+  
+  <video 
+    id="preview" 
+    autoplay 
+    playsinline 
+    muted
+    style="
+      width: 100%;
+      background: #1f2937;
+      border-radius: 8px;
+      aspect-ratio: 16/9;
+    "
+  ></video>
+  
+  <p style="font-size: 11px; color: #6b7280; text-align: center;">
+    Choose to share your entire screen, a window, or a browser tab.
+    <br>Click "Stop sharing" in the browser bar or the Stop button to end.
+  </p>
+</div>

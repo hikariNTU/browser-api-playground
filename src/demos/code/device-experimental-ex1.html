@@ -1,0 +1,41 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 400px;">
+  <div style="padding: 16px; background: #f3f4f6; border-radius: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-weight: 600;">📍 Geolocation</span>
+      <button id="location-btn" style="
+        padding: 8px 16px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+      ">Get Location</button>
+    </div>
+    <div id="location-status" style="font-size: 14px; color: #374151;">
+      Click to get your current location
+    </div>
+  </div>
+  
+  <div style="padding: 16px; background: #f3f4f6; border-radius: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-weight: 600;">🧭 Device Orientation</span>
+      <button id="orientation-btn" style="
+        padding: 8px 16px;
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+      ">🧭 Start Orientation</button>
+    </div>
+    <div id="orientation-status" style="font-size: 14px; color: #374151;">
+      Works best on mobile devices with sensors
+    </div>
+  </div>
+  
+  <p style="font-size: 11px; color: #6b7280; text-align: center;">
+    Geolocation requires permission. Device Orientation works best on mobile.
+  </p>
+</div>

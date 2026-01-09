@@ -1,0 +1,20 @@
+<style>
+  .box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+  .box-a { background: #3b82f6; view-transition-name: box-a; }
+  .box-b { background: #ef4444; view-transition-name: box-b; }
+</style>
+<div id="boxes" style="display: flex; gap: 16px;">
+  <div class="box box-a">A</div>
+  <div class="box box-b">B</div>
+</div>
+<button id="swap-btn" style="margin-top: 16px; padding: 8px 16px;">Swap Boxes</button>

@@ -1,0 +1,43 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 400px;">
+  <div style="padding: 16px; background: #f3f4f6; border-radius: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+      <div id="battery-icon" style="
+        width: 40px;
+        height: 20px;
+        border: 2px solid #374151;
+        border-radius: 4px;
+        position: relative;
+      ">
+        <div style="
+          position: absolute;
+          right: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 10px;
+          background: #374151;
+          border-radius: 0 2px 2px 0;
+        "></div>
+      </div>
+      <span style="font-weight: 600;">Battery Status</span>
+    </div>
+    <div id="battery-status" style="font-size: 14px; color: #374151;">
+      Loading battery info...
+    </div>
+  </div>
+  
+  <div style="padding: 16px; background: #f3f4f6; border-radius: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+      <span style="font-size: 24px;">🌐</span>
+      <span style="font-weight: 600;">Network Information</span>
+    </div>
+    <div id="network-status" style="font-size: 14px; color: #374151;">
+      Loading network info...
+    </div>
+  </div>
+  
+  <p style="font-size: 11px; color: #6b7280; text-align: center;">
+    Battery API: Chrome/Edge only.<br>
+    Network API: Chrome/Edge only.
+  </p>
+</div>

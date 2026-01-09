@@ -1,0 +1,60 @@
+<div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 500px;">
+  <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center;">
+    <select id="mic-select" style="padding: 10px 14px; font-size: 13px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; max-width: 150px;">
+      <option value="">Loading mics...</option>
+    </select>
+    <select id="lang-select" style="padding: 10px 14px; font-size: 13px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0;">
+      <option value="en-US">🇺🇸 English (US)</option>
+      <option value="en-GB">🇬🇧 English (UK)</option>
+      <option value="es-ES">🇪🇸 Spanish</option>
+      <option value="fr-FR">🇫🇷 French</option>
+      <option value="de-DE">🇩🇪 German</option>
+      <option value="it-IT">🇮🇹 Italian</option>
+      <option value="pt-BR">🇧🇷 Portuguese</option>
+      <option value="zh-CN">🇨🇳 Chinese</option>
+      <option value="ja-JP">🇯🇵 Japanese</option>
+      <option value="ko-KR">🇰🇷 Korean</option>
+    </select>
+    <button id="mic-btn" style="
+      padding: 14px 28px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      cursor: pointer;
+    ">
+      🎤 Start
+    </button>
+    <button id="clear-btn" style="
+      padding: 14px 20px;
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      cursor: pointer;
+    ">
+      🗑️ Clear
+    </button>
+  </div>
+  
+  <div style="
+    width: 100%;
+    padding: 16px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    min-height: 100px;
+  ">
+    <p style="margin: 0 0 8px 0; font-size: 11px; color: #6b7280; text-transform: uppercase;">Final:</p>
+    <p id="final-transcript" style="margin: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.5;"></p>
+    
+    <p style="margin: 0 0 8px 0; font-size: 11px; color: #6b7280; text-transform: uppercase;">Interim (live):</p>
+    <p id="interim-transcript" style="margin: 0; font-size: 14px; color: #9ca3af; font-style: italic;"></p>
+  </div>
+  
+  <p style="font-size: 11px; color: #6b7280; text-align: center;">
+    Continuous mode keeps listening until you click Stop.
+    <br>Interim results show what's being recognized in real-time.
+  </p>
+</div>

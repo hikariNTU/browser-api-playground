@@ -1,0 +1,15 @@
+<div style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
+  <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
+    <select id="mic-select" style="padding: 10px 16px; font-size: 14px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; max-width: 200px;">
+      <option value="">Loading devices...</option>
+    </select>
+    <button id="record-btn" style="padding: 12px 24px; font-size: 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      🎤 Record
+    </button>
+    <button id="stop-btn" style="padding: 12px 24px; font-size: 16px; background: #6b7280; color: white; border: none; border-radius: 8px; cursor: pointer;" disabled>
+      ⏹ Stop
+    </button>
+  </div>
+  <p id="status" style="color: #9ca3af; margin: 0;">Click Record to start</p>
+  <audio id="audio-playback" controls style="width: 100%; max-width: 400px;"></audio>
+</div>
