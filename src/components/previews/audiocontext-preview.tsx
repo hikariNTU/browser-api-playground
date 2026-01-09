@@ -138,8 +138,8 @@ export function AudioContextPreview() {
             See also: Morse Code Generator →
           </button>
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent className="max-w-4xl h-[80vh] p-0 gap-0">
-              <DialogHeader className="p-4 pb-2">
+            <DialogContent className="max-w-4xl w-[90vw] h-[80vh] flex flex-col p-0 gap-0">
+              <DialogHeader className="p-4 pb-2 shrink-0">
                 <DialogTitle className="flex items-center gap-2">
                   Morse Code Generator
                   <a
@@ -154,7 +154,7 @@ export function AudioContextPreview() {
               </DialogHeader>
               <iframe
                 src={MORSE_CODE_URL}
-                className="w-full flex-1 border-t"
+                className="w-full flex-1 min-h-0 border-t"
                 title="Morse Code Generator"
               />
             </DialogContent>
