@@ -16,3 +16,19 @@ Use `@/openspec/AGENTS.md` to learn:
 Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
+
+## Commit Message Convention
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+<type>(<scope>): <description>
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+
+**Examples:**
+- `feat(audiocontext): add external link to preview`
+- `fix(media-recorder): resolve device selection bug`
+- `docs: update README with setup instructions`
+- `refactor(hooks): simplify code execution logic`
