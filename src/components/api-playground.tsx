@@ -439,6 +439,11 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
                   language={activeTab === 'js' ? 'javascript' : 'html'}
                   theme={theme}
                   value={activeTab === 'js' ? code : htmlCode}
+                  loading={
+                    <div className="flex items-center justify-center h-full">
+                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    </div>
+                  }
                   onChange={(value) => {
                     if (activeTab === 'js') {
                       setCode(value || '')

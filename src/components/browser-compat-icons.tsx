@@ -8,6 +8,7 @@ import {
 } from '@/lib/browser-compat'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
 
 interface BrowserCompatIconsProps {
   compatKey?: string
@@ -132,7 +133,7 @@ export function BrowserCompatIcons({ compatKey, size = 'sm', className }: Browse
   if (loading) {
     return (
       <div className={cn('flex items-center gap-1', className)}>
-        <span className="text-xs text-muted-foreground animate-pulse">Loading...</span>
+        <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
       </div>
     )
   }
@@ -197,8 +198,9 @@ export function BrowserCompatList({
 
   if (loading) {
     return (
-      <div className={cn('text-sm text-muted-foreground animate-pulse', className)}>
-        Loading browser compatibility...
+      <div className={cn('flex items-center gap-2 text-sm text-muted-foreground', className)}>
+        <Loader2 className="h-4 w-4 animate-spin" />
+        <span>Loading browser compatibility...</span>
       </div>
     )
   }
