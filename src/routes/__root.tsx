@@ -1,5 +1,5 @@
 import { createRootRoute, Link, Outlet, useRouterState } from '@tanstack/react-router'
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useState, useRef, useCallback } from 'react'
 import { demos } from '@/demos'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { QRShareButton } from '@/components/qr-share-button'
@@ -24,6 +24,50 @@ const TanStackRouterDevtools = import.meta.env.PROD
         default: res.TanStackRouterDevtools,
       }))
     )
+
+// Hover popover component for browser compat icons
+function HoverPopover({
+  children,
+  content,
+}: {
+  children: React.ReactNode
+  content: React.ReactNode
+}) {
+  const [open, setOpen] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleMouseEnter = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setOpen(true)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpen(false)
+    }, 150)
+  }, [])
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {children}
+        </span>
+      </PopoverTrigger>
+      <PopoverContent
+        side="right"
+        className="w-auto p-2"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {content}
+      </PopoverContent>
+    </Popover>
+  )
+}
 
 function RootLayout() {
   const routerState = useRouterState()
@@ -128,24 +172,21 @@ function RootLayout() {
                           )}
                         >
                           <span className="font-medium">{demo.name}</span>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Badge
-                                variant={isSupported ? 'default' : 'secondary'}
-                                className={cn(
-                                  'text-[10px] px-1.5 py-0',
-                                  isSupported
-                                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                                    : 'bg-muted text-muted-foreground'
-                                )}
-                              >
-                                {isSupported ? '✓' : '✗'}
-                              </Badge>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="p-2">
-                              <BrowserCompatIcons compatKey={demo.compatKey} size="sm" />
-                            </TooltipContent>
-                          </Tooltip>
+                          <HoverPopover
+                            content={<BrowserCompatIcons compatKey={demo.compatKey} size="sm" />}
+                          >
+                            <Badge
+                              variant={isSupported ? 'default' : 'secondary'}
+                              className={cn(
+                                'text-[10px] px-1.5 py-0 cursor-pointer',
+                                isSupported
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                  : 'bg-muted text-muted-foreground'
+                              )}
+                            >
+                              {isSupported ? '✓' : '✗'}
+                            </Badge>
+                          </HoverPopover>
                         </Link>
                         
                         {/* Example sub-items (flat list, always visible) */}

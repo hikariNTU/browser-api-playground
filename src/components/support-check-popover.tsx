@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode, useState, useRef, useCallback } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -16,6 +16,23 @@ export function SupportCheckPopover({
   children,
   className,
 }: SupportCheckPopoverProps) {
+  const [open, setOpen] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleMouseEnter = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setOpen(true)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpen(false)
+    }, 150)
+  }, [])
+
   const badge = children || (
     <Badge
       variant={isSupported ? 'default' : 'secondary'}
@@ -36,9 +53,19 @@ export function SupportCheckPopover({
   }
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>{badge}</PopoverTrigger>
-      <PopoverContent className="w-auto max-w-sm p-3" side="bottom" align="end">
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {badge}
+        </span>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-auto max-w-sm p-3"
+        side="bottom"
+        align="end"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <div className="space-y-2">
           <div className="text-xs font-medium text-muted-foreground">Feature detection code:</div>
           <pre className="bg-muted px-3 py-2 rounded-md text-xs font-mono overflow-x-auto">
