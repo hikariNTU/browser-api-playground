@@ -9,7 +9,6 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { Loader2 } from 'lucide-react'
 
 interface BrowserCompatIconsProps {
   compatKey?: string
@@ -131,10 +130,15 @@ const BROWSER_ICONS: Record<BrowserKey, React.FC<{ className?: string }>> = {
 export function BrowserCompatIcons({ compatKey, size = 'sm', className }: BrowserCompatIconsProps) {
   const { compat, loading } = useBrowserCompat(compatKey)
 
+  const iconSizeClass = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'
+  const skeletonSizeClass = size === 'sm' ? 'h-6 w-6' : 'h-7 w-7'
+
   if (loading) {
     return (
-      <div className={cn('flex items-center gap-1', className)}>
-        <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+      <div className={cn('flex items-center gap-1.5', className)}>
+        {BROWSER_ORDER.map((browser) => (
+          <Skeleton key={browser} className={cn('rounded', skeletonSizeClass)} />
+        ))}
       </div>
     )
   }
@@ -146,8 +150,6 @@ export function BrowserCompatIcons({ compatKey, size = 'sm', className }: Browse
       </div>
     )
   }
-
-  const iconSizeClass = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'
 
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
