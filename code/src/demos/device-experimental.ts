@@ -24,6 +24,7 @@ export const deviceExperimentalDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: DeviceExperimentalPreview,
+  relatedApis: ['gamepad', 'web-serial'],
   examples: [
     {
       id: 'api-support',

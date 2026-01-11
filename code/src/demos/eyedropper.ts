@@ -17,6 +17,7 @@ export const eyedropperDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: EyeDropperPreview,
+  relatedApis: ['view-transitions'],
   examples: [
     {
       id: 'pick-color',

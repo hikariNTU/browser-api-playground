@@ -18,6 +18,7 @@ export const audioContextDemo: ApiDemo = {
   compatKey: 'api.AudioContext',
   defaultCode,
   PreviewComponent: AudioContextPreview,
+  relatedApis: ['media-recorder', 'web-speech'],
   examples: [
     {
       id: 'tone-generator',

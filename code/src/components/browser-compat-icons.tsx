@@ -108,7 +108,17 @@ function SafariIOSIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       {/* iPhone body */}
-      <rect x="5" y="1" width="14" height="22" rx="2.5" ry="2.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <rect
+        x="5"
+        y="1"
+        width="14"
+        height="22"
+        rx="2.5"
+        ry="2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
       {/* Screen area with Safari compass */}
       <circle cx="12" cy="11" r="5" fill="none" stroke="currentColor" strokeWidth="1" />
       {/* Compass needle */}

@@ -857,7 +857,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isResizing, resizeEdges])
+  }, [isResizing, resizeEdges, panelState.position, panelState.size])
 
   const currentSlide = slides[navigation.currentIndex]
 

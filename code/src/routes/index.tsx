@@ -72,75 +72,79 @@ function HomePage() {
       <div className="relative -mt-6">
         <div className="relative bg-background rounded-t-3xl shadow-[0_-4px_20px_rgb(0,0,0,0.08),0_-12px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgb(0,0,0,0.25),0_-12px_40px_rgb(0,0,0,0.2)]">
           <div className="max-w-6xl mx-auto px-8 pt-10 pb-12">
+            {/* API Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {demos.map((demo) => {
+                const isSupported = demo.checkSupport()
 
-        {/* API Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {demos.map((demo) => {
-            const isSupported = demo.checkSupport()
+                return (
+                  <Link
+                    key={demo.id}
+                    to="/api/$apiId"
+                    params={{ apiId: demo.id }}
+                    className="group"
+                  >
+                    <Card
+                      className={cn(
+                        'h-full transition-all duration-200',
+                        'hover:shadow-lg hover:border-border',
+                        'border-border/50'
+                      )}
+                    >
+                      <CardHeader className="p-6 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
+                            {demo.name}
+                          </CardTitle>
+                          <div onClick={(e) => e.preventDefault()}>
+                            <SupportCheckPopover
+                              isSupported={isSupported}
+                              supportCheck={demo.supportCheck}
+                            />
+                          </div>
+                        </div>
+                        <CardDescription className="text-sm leading-relaxed">
+                          {demo.description}
+                        </CardDescription>
+                        <BrowserCompatIcons compatKey={demo.compatKey} size="sm" />
+                      </CardHeader>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
 
-            return (
-              <Link key={demo.id} to="/api/$apiId" params={{ apiId: demo.id }} className="group">
-                <Card
-                  className={cn(
-                    'h-full transition-all duration-200',
-                    'hover:shadow-lg hover:border-border',
-                    'border-border/50'
-                  )}
+            {/* Footer */}
+            <div className="mt-16 text-center text-sm text-muted-foreground space-y-2">
+              <p>
+                <Link
+                  to="/appendix"
+                  className="underline underline-offset-4 hover:text-foreground transition-colors"
                 >
-                  <CardHeader className="p-6 space-y-3">
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
-                        {demo.name}
-                      </CardTitle>
-                      <div onClick={(e) => e.preventDefault()}>
-                        <SupportCheckPopover
-                          isSupported={isSupported}
-                          supportCheck={demo.supportCheck}
-                        />
-                      </div>
-                    </div>
-                    <CardDescription className="text-sm leading-relaxed">
-                      {demo.description}
-                    </CardDescription>
-                    <BrowserCompatIcons compatKey={demo.compatKey} size="sm" />
-                  </CardHeader>
-                </Card>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Footer */}
-        <div className="mt-16 text-center text-sm text-muted-foreground space-y-2">
-          <p>
-            <Link
-              to="/appendix"
-              className="underline underline-offset-4 hover:text-foreground transition-colors"
-            >
-              Explore More Browser APIs →
-            </Link>
-          </p>
-          <p>
-            Built for Frontend team tech sharing •{' '}
-            <a
-              href="https://developer.mozilla.org/en-US/docs/Web/API"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground transition-colors"
-            >
-              MDN Web APIs
-            </a>
-            {' '}•{' '}
-            <a
-              href="https://github.com/niclin/browser-api-playground"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground transition-colors"
-            >
-              GitHub
-            </a>
-          </p>
-        </div>
+                  Explore More Browser APIs →
+                </Link>
+              </p>
+              <p>
+                Built for Frontend team tech sharing •{' '}
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-foreground transition-colors"
+                >
+                  MDN Web APIs
+                </a>{' '}
+                •{' '}
+                <a
+                  href="https://github.com/niclin/browser-api-playground"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-foreground transition-colors"
+                >
+                  GitHub
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

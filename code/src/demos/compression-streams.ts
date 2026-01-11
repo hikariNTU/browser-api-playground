@@ -14,6 +14,7 @@ export const compressionStreamsDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: CompressionStreamsPreview,
+  relatedApis: ['file-system-access'],
   examples: [
     {
       id: 'compress-decompress',

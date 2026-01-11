@@ -14,6 +14,7 @@ export const webShareDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: WebSharePreview,
+  relatedApis: ['broadcast-channel'],
   examples: [
     {
       id: 'share-page',

@@ -24,6 +24,7 @@ export const webSpeechDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: WebSpeechPreview,
+  relatedApis: ['audiocontext', 'media-recorder'],
   examples: [
     {
       id: 'quick-start',

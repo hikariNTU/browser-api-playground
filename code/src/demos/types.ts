@@ -16,6 +16,8 @@ export interface ApiDemo {
   referenceContent?: ReactNode
   /** Optional React component for interactive preview on intro page */
   PreviewComponent?: ComponentType
+  /** IDs of related demos to suggest at the bottom of intro page */
+  relatedApis?: string[]
 }
 
 export interface DemoExample {

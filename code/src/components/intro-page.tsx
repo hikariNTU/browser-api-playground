@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { ExternalLink, Code2, AlertCircle } from 'lucide-react'
+import { ExternalLink, Code2, AlertCircle, ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { BrowserCompatList } from '@/components/browser-compat-icons'
 import { SupportCheckPopover } from '@/components/support-check-popover'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import { getDemoById } from '@/demos'
 import type { ApiDemo } from '@/demos'
 
 interface IntroPageProps {
@@ -21,6 +22,11 @@ export function IntroPage({ demo }: IntroPageProps) {
     title: ex.title,
     description: ex.description,
   }))
+
+  // Get related APIs (filter out invalid references)
+  const relatedDemos = (demo.relatedApis || [])
+    .map((id) => getDemoById(id))
+    .filter((d): d is ApiDemo => d !== undefined)
 
   return (
     <div className="h-full flex flex-col overflow-auto">
@@ -87,6 +93,37 @@ export function IntroPage({ demo }: IntroPageProps) {
                     <CardContent>
                       <CardDescription className="line-clamp-2">
                         {example.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related APIs Section */}
+        {relatedDemos.length > 0 && (
+          <section>
+            <h2 className="text-lg font-semibold mb-4">Related APIs</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {relatedDemos.map((related) => (
+                <Link
+                  key={related.id}
+                  to="/api/$apiId"
+                  params={{ apiId: related.id }}
+                  className="block"
+                >
+                  <Card className="h-full hover:bg-accent/50 transition-colors cursor-pointer group">
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base">{related.name}</CardTitle>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="line-clamp-2">
+                        {related.description}
                       </CardDescription>
                     </CardContent>
                   </Card>

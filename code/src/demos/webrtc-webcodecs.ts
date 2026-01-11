@@ -16,6 +16,7 @@ export const webrtcWebcodecsDemo: ApiDemo = {
   compatKey: 'api.MediaDevices.getUserMedia',
   defaultCode,
   PreviewComponent: WebRTCPreview,
+  relatedApis: ['media-recorder', 'window-management'],
   examples: [
     {
       id: 'encode-decode',

@@ -14,6 +14,7 @@ export const gamepadDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: GamepadPreview,
+  relatedApis: ['device-experimental'],
   examples: [
     {
       id: 'controller-input',

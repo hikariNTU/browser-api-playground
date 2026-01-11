@@ -18,6 +18,7 @@ export const mediaRecorderDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: MediaRecorderPreview,
+  relatedApis: ['audiocontext', 'webrtc-webcodecs'],
   examples: [
     {
       id: 'basic-recorder',

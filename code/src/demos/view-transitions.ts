@@ -18,6 +18,7 @@ export const viewTransitionsDemo: ApiDemo = {
   compatKey: 'api.Document.startViewTransition',
   defaultCode,
   PreviewComponent: ViewTransitionsPreview,
+  relatedApis: ['eyedropper'],
   examples: [
     {
       id: 'card-animation',

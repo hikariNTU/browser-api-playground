@@ -5,6 +5,8 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { QRShareButton } from '@/components/qr-share-button'
 import { FullscreenToggle } from '@/components/fullscreen-toggle'
 import { MobileNotice } from '@/components/mobile-notice'
+import { GlobalSearch } from '@/components/global-search'
+import { KeyboardShortcutsModal } from '@/components/keyboard-shortcuts-modal'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
@@ -12,7 +14,14 @@ import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { PanelLeftClose, PanelLeft, MoreHorizontal, Loader2, Presentation } from 'lucide-react'
+import {
+  PanelLeftClose,
+  PanelLeft,
+  MoreHorizontal,
+  Loader2,
+  Presentation,
+  Search,
+} from 'lucide-react'
 import { BrowserCompatIcons } from '@/components/browser-compat-icons'
 import logoHorizontal from '@/assets/logo-horizontal.png'
 import iconSquare from '@/assets/icon-square.png'
@@ -177,6 +186,51 @@ function RootLayout() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [slidesRequested])
+
+  // Global search state
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  // Keyboard shortcuts modal state
+  const [shortcutsOpen, setShortcutsOpen] = useState(false)
+
+  // Global keyboard shortcut for search (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if Cmd (Mac) or Ctrl (Windows/Linux) + K is pressed
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        // Don't trigger when typing in input fields or Monaco editor
+        const target = e.target as HTMLElement
+        if (
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.closest('.monaco-editor')
+        ) {
+          return
+        }
+
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+
+      // Check if ? key is pressed for shortcuts modal
+      if (e.key === '?' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const target = e.target as HTMLElement
+        if (
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.closest('.monaco-editor')
+        ) {
+          return
+        }
+
+        e.preventDefault()
+        setShortcutsOpen(true)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   // Handler for slides toggle button
   const handleSlidesToggle = useCallback(() => {
@@ -455,6 +509,21 @@ function RootLayout() {
             >
               {isCollapsed ? (
                 <div className="flex flex-col items-center gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setSearchOpen(true)}
+                        className="h-8 w-8"
+                      >
+                        <Search className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>Search (⌘K)</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <SlidesToggle iconOnly isOpen={slidesOpen} onToggle={handleSlidesToggle} />
                   <FullscreenToggle iconOnly />
                   <ThemeToggle iconOnly />
@@ -462,6 +531,23 @@ function RootLayout() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSearchOpen(true)}
+                        className="w-full justify-start gap-2"
+                      >
+                        <Search className="h-4 w-4" />
+                        <span>Search</span>
+                        <span className="ml-auto text-xs text-muted-foreground">⌘K</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>Search demos and APIs</p>
+                    </TooltipContent>
+                  </Tooltip>
                   <SlidesToggle isOpen={slidesOpen} onToggle={handleSlidesToggle} />
                   <FullscreenToggle />
                   <ThemeToggle />
@@ -478,6 +564,12 @@ function RootLayout() {
         </main>
 
         <MobileNotice />
+
+        {/* Global Search */}
+        <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
+
+        {/* Keyboard Shortcuts Modal */}
+        <KeyboardShortcutsModal open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
 
         {/* Slides Panel - lazy loaded on first request */}
         {slidesRequested && (

@@ -12,6 +12,7 @@ export const webSerialDemo: ApiDemo = {
   compatKey: 'api.Navigator.serial',
   defaultCode,
   PreviewComponent: WebSerialPreview,
+  relatedApis: ['device-experimental'],
   examples: [
     {
       id: 'connect-read',

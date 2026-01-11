@@ -14,6 +14,7 @@ export const fileSystemAccessDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: FileSystemAccessPreview,
+  relatedApis: ['compression-streams'],
   examples: [
     {
       id: 'read-write-files',

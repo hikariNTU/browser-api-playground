@@ -14,6 +14,7 @@ export const broadcastChannelDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: BroadcastChannelPreview,
+  relatedApis: ['web-share'],
   examples: [
     {
       id: 'cross-tab-chat',

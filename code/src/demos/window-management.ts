@@ -20,6 +20,7 @@ export const windowManagementDemo: ApiDemo = {
   defaultCode,
   defaultHtml,
   PreviewComponent: WindowManagementPreview,
+  relatedApis: ['webrtc-webcodecs'],
   examples: [
     {
       id: 'screen-layout',
