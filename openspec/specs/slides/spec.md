@@ -83,27 +83,26 @@ The system SHALL display a horizontal strip of slide thumbnails at the bottom of
 ---
 
 ### Requirement: Markdown Slide Content
-The system SHALL render slide content from Markdown files with support for common formatting, images, links, and videos.
+The system SHALL render slide content from Markdown files with support for common formatting, images, links, videos, and **syntax-highlighted code blocks**.
 
 #### Scenario: Slide renders Markdown formatting
 - **WHEN** slide Markdown contains headings, lists, code blocks, or emphasis
 - **THEN** content is rendered with appropriate styling
 
-#### Scenario: Slide renders images
-- **WHEN** slide Markdown contains image syntax `![alt](path)`
-- **THEN** image is displayed with appropriate sizing to fit panel
+#### Scenario: Slide renders syntax-highlighted code blocks
+- **WHEN** slide Markdown contains a fenced code block with a language identifier (e.g., ```js)
+- **THEN** the code is rendered with syntax highlighting appropriate for that language
+- **AND** highlighting colors adapt to the current theme (light/dark mode)
 
-#### Scenario: Slide renders videos
-- **WHEN** slide Markdown references a video file (`.mp4`, `.webm`)
-- **THEN** video is rendered as a playable `<video>` element with controls
+#### Scenario: Slide renders code block without language
+- **WHEN** slide Markdown contains a fenced code block without a language identifier
+- **THEN** the code is rendered as plain text with monospace styling
+- **AND** no syntax highlighting is applied
 
-#### Scenario: Slide renders internal links
-- **WHEN** slide contains links to playground routes (e.g., `/api/webrtc-webcodecs`)
-- **AND** user clicks the link
-- **THEN** application navigates to that route
-- **AND** slides panel remains open
-
----
+#### Scenario: Slide renders inline code
+- **WHEN** slide Markdown contains inline code (single backticks)
+- **THEN** the code is rendered with monospace styling
+- **AND** no syntax highlighting is applied (inline code remains unstyled)
 
 ### Requirement: Slide File Organization
 The system SHALL load slides from Markdown files in the `/code/slides/` directory.
@@ -144,4 +143,54 @@ The system SHALL lazy load the entire slides feature only when the user explicit
 - **WHEN** user has previously opened slides in the session
 - **AND** user presses `Cmd/Ctrl + /` again
 - **THEN** panel opens immediately (no loading delay)
+
+### Requirement: Pinch Gesture Three-State Panel Control
+The system SHALL allow users to control the slides panel state (Maximized ↔ Normal ↔ Minimized) using trackpad pinch gestures.
+
+#### Scenario: User pinches in to minimize panel
+- **WHEN** slides panel is open in normal size
+- **AND** user performs a pinch-in gesture (two-finger pinch) on the panel
+- **THEN** the panel smoothly transitions to a minimized state (280×48px strip)
+- **AND** minimized panel displays current slide number/total and title
+- **AND** minimized state is saved to localStorage
+
+#### Scenario: User pinches in to restore from maximized
+- **WHEN** slides panel is maximized
+- **AND** user performs a pinch-in gesture on the panel
+- **THEN** the panel transitions to normal size
+- **AND** gesture cooldown activates to prevent immediate further transitions
+
+#### Scenario: User pinches out to restore from minimized
+- **WHEN** slides panel is in minimized state
+- **AND** user performs a pinch-out gesture (two-finger expand) on the panel
+- **THEN** the panel smoothly transitions back to normal size
+- **AND** normal state is saved to localStorage
+
+#### Scenario: User pinches out to maximize panel
+- **WHEN** slides panel is in normal size
+- **AND** user performs a pinch-out gesture on the panel
+- **THEN** the panel transitions to maximized state (full viewport minus 40px margins)
+
+#### Scenario: Cooldown prevents continuous state jumps
+- **WHEN** user performs a pinch gesture that triggers a state change
+- **AND** user continues the same gesture without releasing
+- **THEN** no further state changes occur until gesture ends
+- **AND** for Chrome, cooldown resets after 300ms of no pinch events
+
+#### Scenario: Minimized panel shows essential info
+- **WHEN** slides panel is minimized
+- **THEN** panel displays as a 280×48px strip at bottom-right
+- **AND** shows current slide number and title in compact form
+- **AND** shows an expand button to restore via click
+
+#### Scenario: User clicks expand button to restore
+- **WHEN** slides panel is minimized
+- **AND** user clicks the expand button
+- **THEN** the panel restores to its previous normal size
+
+#### Scenario: Minimized state persists across sessions
+- **WHEN** user minimizes the panel
+- **AND** user reloads the page
+- **AND** user opens slides panel again
+- **THEN** panel opens in minimized state
 

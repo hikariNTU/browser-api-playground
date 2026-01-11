@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { cn } from '@/lib/utils'
 import { BrowserCompatIcons } from '@/components/browser-compat-icons'
 import { SupportCheckPopover } from '@/components/support-check-popover'
+import logoHorizontal from '@/assets/logo-horizontal.png'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -20,6 +21,11 @@ function HomePage() {
       <div className="max-w-6xl mx-auto px-8 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16 space-y-4">
+          <img
+            src={logoHorizontal}
+            alt="Browser API Playground"
+            className="h-16 mx-auto mb-6 dark:invert"
+          />
           <h1 className="text-4xl font-bold tracking-tight">Browser API Playground</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Explore powerful browser APIs with live, editable code examples. Pick an API below to

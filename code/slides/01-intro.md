@@ -1,24 +1,23 @@
-# Browser API Playground
+# Why Browser APIs?
 
-Interactive demos for modern browser APIs
+Your browser isn't just a document viewer anymore — it's a **full application platform**.
 
----
+## The Value Proposition aaa
 
-## What is this?
+| Traditional Approach | Browser APIs |
+|---------------------|--------------|
+| 💰 GPU servers & API costs | **Free** — runs on user's device |
+| 🐌 Network latency (100-500ms) | **Instant** — local processing |
+| 📡 Requires internet | **Offline-capable** |
+| 🔧 Complex infrastructure | **Zero setup** — just ship HTML |
+| 📦 App store approval | **Instant delivery** — click a link |
 
-A collection of **live, interactive demos** showcasing modern browser APIs:
+## What's Possible Today
 
-- 🎤 Media Recorder
-- 🎨 EyeDropper
-- 📺 Screen Wake Lock
-- 🎮 Gamepad API
-- ...and more!
+- 🎤 **Speech Recognition** — Voice typing, transcription, commands
+- 🎹 **Audio Processing** — DAWs, synthesizers, real-time effects
+- 🎮 **Hardware Access** — Gamepads, MIDI, serial devices, USB
+- 🖥️ **Window Management** — Multi-monitor layouts, fullscreen
+- 📁 **File System** — Read/write local files with user permission
 
----
-
-## Why?
-
-- Learn by doing, not just reading
-- Test browser compatibility instantly
-- Copy working code snippets
-- Share demos via URL
+**Trade-off:** Less powerful than native, but surprisingly capable — and getting better every year.
