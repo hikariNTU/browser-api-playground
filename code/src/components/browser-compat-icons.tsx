@@ -201,10 +201,7 @@ export function BrowserCompatList({
     return (
       <div className={cn('grid grid-cols-2 sm:grid-cols-3 gap-2', className)}>
         {BROWSER_ORDER.map((browser) => (
-          <div
-            key={browser}
-            className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50"
-          >
+          <div key={browser} className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50">
             <Skeleton className="h-5 w-5 rounded" />
             <div className="flex flex-col gap-1">
               <Skeleton className="h-3.5 w-16" />

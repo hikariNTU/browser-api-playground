@@ -127,10 +127,7 @@ export function IntroPageSkeleton() {
           <Skeleton className="h-6 w-36 mb-4" />
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50"
-              >
+              <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50">
                 <Skeleton className="h-5 w-5 rounded" />
                 <div className="flex flex-col gap-1">
                   <Skeleton className="h-3.5 w-16" />
@@ -177,13 +174,7 @@ export function IntroPageSkeleton() {
 /**
  * Error fallback for IntroPage
  */
-export function IntroPageError({
-  error,
-  onRetry,
-}: {
-  error?: Error | null
-  onRetry?: () => void
-}) {
+export function IntroPageError({ error, onRetry }: { error?: Error | null; onRetry?: () => void }) {
   return (
     <div className="h-full flex flex-col overflow-auto">
       {/* Header placeholder */}

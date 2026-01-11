@@ -2,13 +2,14 @@
 // Click the Share button to open your device's share dialog
 
 const shareBtn = document.getElementById('share-btn')
+const shareUrlInput = document.getElementById('share-url')
 const status = document.getElementById('status')
 
 shareBtn.onclick = async () => {
   const shareData = {
     title: 'Browser API Playground',
-    text: 'Check out these cool browser APIs!',
-    url: window.location.href,
+    text: 'Check out this link!',
+    url: shareUrlInput.value || 'https://example.com',
   }
 
   try {
