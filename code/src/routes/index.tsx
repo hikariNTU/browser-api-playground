@@ -136,7 +136,7 @@ function HomePage() {
                 </a>{' '}
                 •{' '}
                 <a
-                  href="https://github.com/niclin/browser-api-playground"
+                  href="https://github.com/hikariNTU/browser-api-playground"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-4 hover:text-foreground transition-colors"
