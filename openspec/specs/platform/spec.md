@@ -63,13 +63,20 @@ The system SHALL provide a Monaco-based code editor with JavaScript/TypeScript s
 ---
 
 ### Requirement: Sandboxed Code Execution
-The system SHALL execute user code in an isolated iframe sandbox to prevent crashes from affecting the main application.
+The system SHALL execute user code in an isolated iframe sandbox with the HTML template injected into the body before script execution, preventing crashes from affecting the main application.
 
-#### Scenario: User runs code successfully
+#### Scenario: User runs code with HTML template
 - **WHEN** user clicks the Run button
-- **THEN** code executes in sandboxed iframe
-- **AND** console.log outputs appear in the output panel
-- **AND** API results are displayed in the result area
+- **AND** HTML template exists (in HTML tab)
+- **THEN** iframe body is populated with HTML template content
+- **THEN** JavaScript code executes after HTML is injected
+- **AND** JavaScript can reference elements defined in HTML template
+
+#### Scenario: User runs code without HTML template
+- **WHEN** user clicks the Run button
+- **AND** no HTML template exists (HTML tab empty or placeholder)
+- **THEN** iframe body starts empty with base styles
+- **THEN** JavaScript code executes and creates DOM dynamically
 
 #### Scenario: User code throws error
 - **WHEN** user code throws an uncaught exception
@@ -208,4 +215,24 @@ The system SHALL provide an appendix page listing additional browser APIs not de
 - **WHEN** user scrolls to the bottom of the home page
 - **THEN** an "Explore More APIs" link is visible
 - **AND** clicking it navigates to the appendix page
+
+### Requirement: Code Persistence Per Language
+The system SHALL persist both JavaScript and HTML editor content separately to localStorage, allowing users to modify and restore code independently.
+
+#### Scenario: User modifies JavaScript and HTML
+- **WHEN** user edits JavaScript code in JS tab
+- **AND** user edits HTML template in HTML tab
+- **THEN** both changes are persisted independently to localStorage
+- **AND** each has its own storage key pattern
+
+#### Scenario: User resets code
+- **WHEN** user clicks Reset button
+- **THEN** both JavaScript and HTML are restored to their defaults
+- **AND** localStorage entries for both are cleared
+- **AND** code is automatically executed with restored defaults
+
+#### Scenario: User sees modification indicator
+- **WHEN** either JavaScript or HTML differs from default
+- **THEN** modified indicator (dot) is displayed
+- **AND** tooltip explains code has been modified
 

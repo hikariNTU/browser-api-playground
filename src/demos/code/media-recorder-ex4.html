@@ -1,5 +1,9 @@
+<!-- Audio Visualization: Waveform and Spectrum -->
+<!-- Uses Web Audio API's AnalyserNode for real-time visualization -->
 <div style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
+  <!-- Canvas for drawing audio visualization -->
   <canvas id="visualizer" width="400" height="150" style="border-radius: 8px; background: #1f2937;"></canvas>
+  
   <div style="display: flex; gap: 12px; align-items: center;">
     <button id="start-btn" style="padding: 12px 24px; font-size: 16px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer;">
       ▶ Start
@@ -7,6 +11,7 @@
     <button id="stop-btn" style="padding: 12px 24px; font-size: 16px; background: #6b7280; color: white; border: none; border-radius: 8px; cursor: pointer;" disabled>
       ⏹ Stop
     </button>
+    <!-- Switch between waveform (time domain) and spectrum (frequency domain) -->
     <select id="mode-select" style="padding: 10px 16px; font-size: 14px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0;">
       <option value="waveform">🌊 Waveform</option>
       <option value="spectrum">📊 Spectrum</option>

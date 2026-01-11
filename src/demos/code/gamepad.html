@@ -1,0 +1,12 @@
+<!-- Gamepad API: Controller Input Display -->
+<!-- Visual display of connected gamepad buttons and axes -->
+<div id="gamepad-container" style="display: flex; flex-direction: column; gap: 16px; padding: 16px;">
+  <!-- Connection status - shows waiting message until gamepad connects -->
+  <div id="connection-status" style="text-align: center; padding: 20px; background: #1e293b; border-radius: 8px;">
+    <p style="margin: 0; color: #9ca3af;">🎮 Waiting for gamepad...</p>
+    <p style="margin: 8px 0 0; font-size: 12px; color: #6b7280;">Connect a controller and press any button</p>
+  </div>
+  
+  <!-- Gamepad display area - populated by JavaScript -->
+  <div id="gamepad-display" style="font-family: monospace; display: none;"></div>
+</div>

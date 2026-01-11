@@ -1,0 +1,25 @@
+<!-- File System Access API: Read/Write Local Files -->
+<!-- Open, edit, and save files directly to the file system -->
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px;">
+  <!-- File operation buttons -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button id="open-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      📂 Open File
+    </button>
+    <button id="save-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      💾 Save File
+    </button>
+    <button id="dir-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #8b5cf6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      📁 Browse Directory
+    </button>
+  </div>
+  
+  <!-- Text editor area for file contents -->
+  <textarea id="file-content" placeholder="File contents will appear here..." style="width: 100%; height: 150px; padding: 12px; font-family: monospace; font-size: 14px; border: 1px solid #475569; border-radius: 8px; resize: vertical; background: #1e293b; color: #e2e8f0;"></textarea>
+  
+  <!-- Directory listing container -->
+  <div id="dir-list" style="font-family: monospace; font-size: 13px; max-height: 200px; overflow-y: auto; display: none; background: #1e293b; padding: 12px; border-radius: 8px;"></div>
+  
+  <!-- Status message -->
+  <p id="status" style="font-size: 14px; color: #9ca3af; margin: 0;"></p>
+</div>

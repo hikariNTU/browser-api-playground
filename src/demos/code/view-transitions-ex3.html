@@ -1,3 +1,5 @@
+<!-- View Transitions: Named Transitions -->
+<!-- Each box has a unique view-transition-name for independent animation -->
 <style>
   .box {
     width: 80px;
@@ -10,9 +12,11 @@
     color: white;
     cursor: pointer;
   }
+  /* view-transition-name allows each element to animate independently */
   .box-a { background: #3b82f6; view-transition-name: box-a; }
   .box-b { background: #ef4444; view-transition-name: box-b; }
 </style>
+
 <div id="boxes" style="display: flex; gap: 16px;">
   <div class="box box-a">A</div>
   <div class="box box-b">B</div>

@@ -1,27 +1,10 @@
 // Web Share API - Native sharing
 // Click the Share button to open your device's share dialog
 
-// Create share button (requires user gesture)
-const button = document.createElement('button')
-button.textContent = '📤 Share This Page'
-button.style.cssText = `
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  background: #10b981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-`
-button.onmouseover = () => (button.style.background = '#059669')
-button.onmouseout = () => (button.style.background = '#10b981')
+const shareBtn = document.getElementById('share-btn')
+const status = document.getElementById('status')
 
-const status = document.createElement('p')
-status.style.cssText = 'margin-top: 12px; color: #666;'
-
-button.onclick = async () => {
+shareBtn.onclick = async () => {
   const shareData = {
     title: 'Browser API Playground',
     text: 'Check out these cool browser APIs!',
@@ -32,7 +15,7 @@ button.onclick = async () => {
     await navigator.share(shareData)
     console.log('Content shared successfully!')
     status.textContent = '✅ Shared successfully!'
-    status.style.color = '#10b981'
+    status.style.color = '#22c55e'
   } catch (e) {
     if (e.name === 'AbortError') {
       console.log('Share cancelled by user')
@@ -49,11 +32,11 @@ button.onclick = async () => {
 // Check if sharing is supported
 if (navigator.share) {
   console.log('Web Share API is supported!')
-  document.body.appendChild(button)
-  document.body.appendChild(status)
   console.log('Click the Share button above!')
 } else {
   console.log('Web Share API is not supported in this browser')
-  status.textContent = '⚠️ Web Share not supported'
-  document.body.appendChild(status)
+  shareBtn.disabled = true
+  shareBtn.style.opacity = '0.5'
+  status.textContent = '⚠️ Web Share not supported in this browser'
 }
+

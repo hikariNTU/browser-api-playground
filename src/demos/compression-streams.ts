@@ -1,5 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/compression-streams.js?raw'
+import defaultHtml from './code/compression-streams.html?raw'
 import { CompressionStreamsPreview } from '@/components/previews'
 
 export const compressionStreamsDemo: ApiDemo = {
@@ -11,6 +12,7 @@ export const compressionStreamsDemo: ApiDemo = {
   supportCheck: "'CompressionStream' in window",
   compatKey: 'api.CompressionStream',
   defaultCode,
+  defaultHtml,
   PreviewComponent: CompressionStreamsPreview,
   examples: [
     {
@@ -18,6 +20,7 @@ export const compressionStreamsDemo: ApiDemo = {
       title: 'Compress & Decompress',
       description: 'Compress and decompress text data with format comparison',
       code: defaultCode,
+      html: defaultHtml,
     },
   ],
 }

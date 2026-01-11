@@ -1,3 +1,5 @@
+<!-- Web Speech: Continuous Recognition with Interim Results -->
+<!-- Shows real-time transcription as you speak -->
 <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 500px;">
   <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; align-items: center;">
     <select id="mic-select" style="padding: 10px 14px; font-size: 13px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; max-width: 150px;">
@@ -39,6 +41,7 @@
     </button>
   </div>
   
+  <!-- Transcript display with final and interim sections -->
   <div style="
     width: 100%;
     padding: 16px;
@@ -46,9 +49,11 @@
     border-radius: 12px;
     min-height: 100px;
   ">
+    <!-- Final transcript: confirmed recognized text -->
     <p style="margin: 0 0 8px 0; font-size: 11px; color: #6b7280; text-transform: uppercase;">Final:</p>
     <p id="final-transcript" style="margin: 0 0 12px 0; font-size: 16px; color: #1f2937; line-height: 1.5;"></p>
     
+    <!-- Interim transcript: live recognition in progress -->
     <p style="margin: 0 0 8px 0; font-size: 11px; color: #6b7280; text-transform: uppercase;">Interim (live):</p>
     <p id="interim-transcript" style="margin: 0; font-size: 14px; color: #9ca3af; font-style: italic;"></p>
   </div>

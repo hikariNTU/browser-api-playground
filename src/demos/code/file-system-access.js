@@ -1,78 +1,14 @@
 // File System Access API - Read/Write local files
 // Chrome/Edge only - requires user gesture
 
+const openBtn = document.getElementById('open-btn')
+const saveBtn = document.getElementById('save-btn')
+const dirBtn = document.getElementById('dir-btn')
+const textarea = document.getElementById('file-content')
+const dirList = document.getElementById('dir-list')
+const status = document.getElementById('status')
+
 let fileHandle = null
-
-// Create UI
-const container = document.createElement('div')
-container.style.cssText = 'display: flex; flex-direction: column; gap: 12px;'
-
-const btnRow = document.createElement('div')
-btnRow.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;'
-
-// Open button
-const openBtn = document.createElement('button')
-openBtn.textContent = '📂 Open File'
-openBtn.style.cssText = `
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`
-
-// Save button
-const saveBtn = document.createElement('button')
-saveBtn.textContent = '💾 Save File'
-saveBtn.style.cssText = `
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  background: #10b981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`
-
-// Directory button
-const dirBtn = document.createElement('button')
-dirBtn.textContent = '📁 Browse Directory'
-dirBtn.style.cssText = `
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 500;
-  background: #8b5cf6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`
-
-// Text area for content
-const textarea = document.createElement('textarea')
-textarea.style.cssText = `
-  width: 100%;
-  height: 150px;
-  padding: 12px;
-  font-family: monospace;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  resize: vertical;
-`
-textarea.placeholder = 'File contents will appear here...'
-
-// Directory listing
-const dirList = document.createElement('div')
-dirList.style.cssText = 'font-family: monospace; font-size: 13px; max-height: 200px; overflow-y: auto; display: none;'
-
-// Status
-const status = document.createElement('p')
-status.style.cssText = 'font-size: 14px; color: #666; margin: 0;'
 
 openBtn.onclick = async () => {
   try {
@@ -92,7 +28,7 @@ openBtn.onclick = async () => {
     textarea.style.display = 'block'
     dirList.style.display = 'none'
     status.textContent = `✅ Opened: ${file.name} (${file.size} bytes)`
-    status.style.color = '#10b981'
+    status.style.color = '#22c55e'
 
     console.log('File opened:', file.name)
     console.log('Size:', file.size, 'bytes')
@@ -128,7 +64,7 @@ saveBtn.onclick = async () => {
 
     fileHandle = handle
     status.textContent = `✅ Saved: ${handle.name}`
-    status.style.color = '#10b981'
+    status.style.color = '#22c55e'
 
     console.log('File saved!')
   } catch (e) {
@@ -164,7 +100,7 @@ dirBtn.onclick = async () => {
       const div = document.createElement('div')
       div.style.cssText = 'padding: 4px 8px; border-radius: 4px; cursor: default;'
       div.textContent = `${icon} ${entry.name}`
-      div.onmouseover = () => (div.style.background = '#f1f5f9')
+      div.onmouseover = () => (div.style.background = '#334155')
       div.onmouseout = () => (div.style.background = 'transparent')
       dirList.appendChild(div)
     })
@@ -183,14 +119,6 @@ dirBtn.onclick = async () => {
   }
 }
 
-btnRow.appendChild(openBtn)
-btnRow.appendChild(saveBtn)
-btnRow.appendChild(dirBtn)
-container.appendChild(btnRow)
-container.appendChild(textarea)
-container.appendChild(dirList)
-container.appendChild(status)
-document.body.appendChild(container)
-
 console.log('File System Access API ready!')
 console.log('Click Open to read a file, Save to write, or Browse Directory.')
+

@@ -1,5 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/file-system-access.js?raw'
+import defaultHtml from './code/file-system-access.html?raw'
 import { FileSystemAccessPreview } from '@/components/previews'
 
 export const fileSystemAccessDemo: ApiDemo = {
@@ -11,6 +12,7 @@ export const fileSystemAccessDemo: ApiDemo = {
   supportCheck: "'showOpenFilePicker' in window",
   compatKey: 'api.Window.showOpenFilePicker',
   defaultCode,
+  defaultHtml,
   PreviewComponent: FileSystemAccessPreview,
   examples: [
     {
@@ -18,6 +20,7 @@ export const fileSystemAccessDemo: ApiDemo = {
       title: 'Read & Write Files',
       description: 'Open, edit, and save files directly to the file system',
       code: defaultCode,
+      html: defaultHtml,
     },
   ],
 }

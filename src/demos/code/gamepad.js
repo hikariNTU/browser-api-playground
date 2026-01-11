@@ -1,7 +1,10 @@
 // Gamepad API - Read controller input
 // Connect a gamepad and press any button to activate it
 
+const connectionStatus = document.getElementById('connection-status')
+const display = document.getElementById('gamepad-display')
 let animationId = null
+let vibrateBtn = null
 
 function updateGamepadDisplay() {
   const gamepads = navigator.getGamepads()
@@ -14,40 +17,35 @@ function updateGamepadDisplay() {
     return
   }
 
-  // Clear and update display
-  let display = document.getElementById('gamepad-display')
-  if (!display) {
-    display = document.createElement('div')
-    display.id = 'gamepad-display'
-    display.style.cssText = 'font-family: monospace; padding: 16px;'
-    document.body.appendChild(display)
+  // Hide connection status, show display
+  connectionStatus.style.display = 'none'
+  display.style.display = 'block'
 
-    // Add vibration button if supported
-    if (gamepad.vibrationActuator) {
-      const vibrateBtn = document.createElement('button')
-      vibrateBtn.id = 'vibrate-btn'
-      vibrateBtn.textContent = '📳 Test Vibration'
-      vibrateBtn.style.cssText = 'padding: 10px 20px; background: #8b5cf6; color: white; border: none; border-radius: 6px; cursor: pointer; margin: 12px 0; font-weight: 500;'
-      vibrateBtn.onclick = async () => {
-        const gp = [...navigator.getGamepads()].find((g) => g?.vibrationActuator)
-        if (gp?.vibrationActuator) {
-          vibrateBtn.textContent = '📳 Vibrating...'
-          await gp.vibrationActuator.playEffect('dual-rumble', {
-            startDelay: 0,
-            duration: 500,
-            weakMagnitude: 0.5,
-            strongMagnitude: 1.0,
-          })
-          vibrateBtn.textContent = '📳 Test Vibration'
-          console.log('✅ Vibration complete!')
-        }
+  // Add vibration button if supported and not already added
+  if (gamepad.vibrationActuator && !vibrateBtn) {
+    vibrateBtn = document.createElement('button')
+    vibrateBtn.id = 'vibrate-btn'
+    vibrateBtn.textContent = '📳 Test Vibration'
+    vibrateBtn.style.cssText = 'padding: 10px 20px; background: #8b5cf6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-weight: 500;'
+    vibrateBtn.onclick = async () => {
+      const gp = [...navigator.getGamepads()].find((g) => g?.vibrationActuator)
+      if (gp?.vibrationActuator) {
+        vibrateBtn.textContent = '📳 Vibrating...'
+        await gp.vibrationActuator.playEffect('dual-rumble', {
+          startDelay: 0,
+          duration: 500,
+          weakMagnitude: 0.5,
+          strongMagnitude: 1.0,
+        })
+        vibrateBtn.textContent = '📳 Test Vibration'
+        console.log('✅ Vibration complete!')
       }
-      display.before(vibrateBtn)
     }
+    display.before(vibrateBtn)
   }
 
   // Build display HTML
-  let html = `<h3>🎮 ${gamepad.id}</h3>`
+  let html = `<h3 style="margin: 0 0 12px;">🎮 ${gamepad.id}</h3>`
 
   // Vibration support indicator
   html += `<p style="color: ${gamepad.vibrationActuator ? '#22c55e' : '#ef4444'}; margin: 8px 0;">
@@ -59,13 +57,12 @@ function updateGamepadDisplay() {
   html += '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">'
   gamepad.buttons.forEach((button, i) => {
     const pressed = button.pressed
-    const value = button.value.toFixed(2)
     html += `
       <div style="
         width: 40px;
         height: 40px;
-        background: ${pressed ? '#3b82f6' : '#e5e7eb'};
-        color: ${pressed ? 'white' : '#374151'};
+        background: ${pressed ? '#3b82f6' : '#374151'};
+        color: ${pressed ? 'white' : '#9ca3af'};
         display: flex;
         align-items: center;
         justify-content: center;
@@ -92,11 +89,11 @@ function updateGamepadDisplay() {
 
     html += `
       <div style="text-align: center;">
-        <svg width="60" height="60" style="background: #f3f4f6; border-radius: 50%;">
-          <circle cx="30" cy="30" r="25" fill="none" stroke="#d1d5db" stroke-width="1"/>
+        <svg width="60" height="60" style="background: #1e293b; border-radius: 50%;">
+          <circle cx="30" cy="30" r="25" fill="none" stroke="#475569" stroke-width="1"/>
           <circle cx="${dotX}" cy="${dotY}" r="8" fill="#3b82f6"/>
         </svg>
-        <div style="font-size: 11px; margin-top: 4px;">
+        <div style="font-size: 11px; margin-top: 4px; color: #9ca3af;">
           X: ${x.toFixed(2)}<br>Y: ${y.toFixed(2)}
         </div>
       </div>

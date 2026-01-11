@@ -15,6 +15,8 @@ import {
   HelpCircle,
   Monitor,
   Terminal,
+  FileCode,
+  FileText,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -31,30 +33,53 @@ interface ApiPlaygroundProps {
 }
 
 const STORAGE_KEY_PREFIX = 'browser-api-playground-code-'
+const STORAGE_KEY_HTML_PREFIX = 'browser-api-playground-html-'
 
 function getStorageKey(demoId: string, exampleId: string): string {
   return `${STORAGE_KEY_PREFIX}${demoId}-${exampleId}`
+}
+
+function getHtmlStorageKey(demoId: string, exampleId: string): string {
+  return `${STORAGE_KEY_HTML_PREFIX}${demoId}-${exampleId}`
 }
 
 function getStoredCode(demoId: string, exampleId: string): string | null {
   return localStorage.getItem(getStorageKey(demoId, exampleId))
 }
 
+function getStoredHtml(demoId: string, exampleId: string): string | null {
+  return localStorage.getItem(getHtmlStorageKey(demoId, exampleId))
+}
+
 function setStoredCode(demoId: string, exampleId: string, code: string) {
   localStorage.setItem(getStorageKey(demoId, exampleId), code)
+}
+
+function setStoredHtml(demoId: string, exampleId: string, html: string) {
+  localStorage.setItem(getHtmlStorageKey(demoId, exampleId), html)
 }
 
 function clearStoredCode(demoId: string, exampleId: string) {
   localStorage.removeItem(getStorageKey(demoId, exampleId))
 }
 
+function clearStoredHtml(demoId: string, exampleId: string) {
+  localStorage.removeItem(getHtmlStorageKey(demoId, exampleId))
+}
+
 export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
+  // Tab state for switching between JS and HTML editors
+  const [activeTab, setActiveTab] = useState<'js' | 'html'>('js')
+  
   // Use lazy initializer to load stored code on mount
   const [code, setCode] = useState(() => {
     const stored = getStoredCode(demo.id, example.id)
     return stored || example.code
   })
-  const [currentHtml, setCurrentHtml] = useState<string | undefined>(example.html)
+  const [htmlCode, setHtmlCode] = useState(() => {
+    const stored = getStoredHtml(demo.id, example.id)
+    return stored || example.html || ''
+  })
   const [copied, setCopied] = useState(false)
   const [theme, setTheme] = useState<'vs-dark' | 'light'>('vs-dark')
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -64,7 +89,10 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
   const { isRunning, messages, error, execute, clear, clearConsole } =
     useCodeExecution(outputContainerRef)
   const isSupported = demo.checkSupport()
-  const isModified = code !== example.code
+  const hasHtmlTemplate = Boolean(example.html)
+  const isJsModified = code !== example.code
+  const isHtmlModified = htmlCode !== (example.html || '')
+  const isModified = isJsModified || isHtmlModified
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -98,22 +126,40 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
     return () => clearTimeout(timeoutId)
   }, [code, demo.id, example.id, example.code])
 
+  // Persist HTML changes (debounced)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (htmlCode && htmlCode !== (example.html || '')) {
+        setStoredHtml(demo.id, example.id, htmlCode)
+      }
+    }, 500)
+    return () => clearTimeout(timeoutId)
+  }, [htmlCode, demo.id, example.id, example.html])
+
   const handleRun = useCallback(() => {
-    execute(code, currentHtml)
-  }, [code, currentHtml, execute])
+    execute(code, htmlCode || undefined)
+  }, [code, htmlCode, execute])
 
   const handleReset = useCallback(() => {
-    setCode(example.code)
-    setCurrentHtml(example.html)
+    const defaultCode = example.code
+    const defaultHtml = example.html || ''
+    setCode(defaultCode)
+    setHtmlCode(defaultHtml)
     clearStoredCode(demo.id, example.id)
+    clearStoredHtml(demo.id, example.id)
     clear()
-  }, [example.code, example.html, demo.id, example.id, clear])
+    // Auto-execute after reset (consistent with example switching behavior)
+    if (isSupported) {
+      execute(defaultCode, defaultHtml || undefined)
+    }
+  }, [example.code, example.html, demo.id, example.id, clear, isSupported, execute])
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(code)
+    const contentToCopy = activeTab === 'js' ? code : htmlCode
+    await navigator.clipboard.writeText(contentToCopy)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }, [code])
+  }, [activeTab, code, htmlCode])
 
   const handleFormat = useCallback(async () => {
     if (editorRef.current) {
@@ -125,7 +171,7 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
   // Auto-run code on first mount (when user switches tabs)
   useEffect(() => {
     if (isSupported) {
-      execute(code, currentHtml)
+      execute(code, htmlCode || undefined)
     }
     // Only run on mount - component remounts when demo changes due to key={demo.id}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,10 +202,10 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleRun, handleFormat])
 
-  const handleEditorMount = (editor: editor.IStandaloneCodeEditor, monacoInstance: Monaco) => {
+  const handleEditorMount = useCallback((editor: editor.IStandaloneCodeEditor, monacoInstance: Monaco) => {
     editorRef.current = editor
 
-    // Add experimental browser API type definitions to suppress type errors
+    // Add experimental browser API type definitions to suppress type errors (for JS only)
     monacoInstance.languages.typescript.javascriptDefaults.addExtraLib(
       experimentalBrowserAPITypes,
       'experimental-browser-apis.d.ts'
@@ -177,7 +223,7 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
         editor.trigger('keyboard', 'editor.action.quickCommand', null)
       }
     )
-  }
+  }, [])
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -333,14 +379,72 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
 
+              {/* Editor Tabs */}
+              <div className="flex items-center border-b border-border/50 bg-muted/20">
+                <button
+                  onClick={() => setActiveTab('js')}
+                  className={cn(
+                    'flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-[1px]',
+                    activeTab === 'js'
+                      ? 'border-primary text-foreground'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  <FileCode className="h-4 w-4" />
+                  JavaScript
+                  {isJsModified && (
+                    <Circle className="h-1.5 w-1.5 fill-amber-500 text-amber-500" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab('html')}
+                  className={cn(
+                    'flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-[1px]',
+                    activeTab === 'html'
+                      ? 'border-primary text-foreground'
+                      : 'border-transparent text-muted-foreground hover:text-foreground',
+                    !hasHtmlTemplate && 'opacity-60'
+                  )}
+                >
+                  <FileText className="h-4 w-4" />
+                  HTML
+                  {hasHtmlTemplate && isHtmlModified && (
+                    <Circle className="h-1.5 w-1.5 fill-amber-500 text-amber-500" />
+                  )}
+                  {!hasHtmlTemplate && (
+                    <span className="text-[10px] text-muted-foreground ml-1">(none)</span>
+                  )}
+                </button>
+              </div>
+
               {/* Monaco Editor */}
-              <div className="flex-1">
+              <div className="flex-1 relative">
+                {activeTab === 'html' && !hasHtmlTemplate && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-muted/30 z-10">
+                    <div className="text-center px-8 py-6 max-w-md">
+                      <FileText className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                      <p className="text-sm text-muted-foreground">
+                        This example creates DOM elements dynamically using JavaScript.
+                      </p>
+                      <p className="text-xs text-muted-foreground/70 mt-2">
+                        No HTML template is defined for this demo.
+                      </p>
+                    </div>
+                  </div>
+                )}
                 <Editor
+                  key={`${demo.id}-${example.id}-${activeTab}`}
                   height="100%"
-                  language="javascript"
+                  language={activeTab === 'js' ? 'javascript' : 'html'}
                   theme={theme}
-                  value={code}
-                  onChange={(value) => setCode(value || '')}
+                  value={activeTab === 'js' ? code : htmlCode}
+                  onChange={(value) => {
+                    if (activeTab === 'js') {
+                      setCode(value || '')
+                    } else {
+                      setHtmlCode(value || '')
+                    }
+                  }}
                   onMount={handleEditorMount}
                   options={{
                     minimap: { enabled: false },
@@ -353,6 +457,7 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
                     padding: { top: 16, bottom: 16 },
                     renderWhitespace: 'all',
                     fixedOverflowWidgets: true,
+                    readOnly: activeTab === 'html' && !hasHtmlTemplate,
                   }}
                 />
               </div>

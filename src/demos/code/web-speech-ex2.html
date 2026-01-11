@@ -1,8 +1,12 @@
+<!-- Web Speech: Speech Recognition (Speech-to-Text) -->
+<!-- Converts spoken words to text using SpeechRecognition API -->
 <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; max-width: 500px; align-items: center;">
   <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center;">
+    <!-- Microphone selector -->
     <select id="mic-select" style="padding: 10px 16px; font-size: 14px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; max-width: 180px;">
       <option value="">Loading mics...</option>
     </select>
+    <!-- Language selector for recognition -->
     <select id="lang-select" style="padding: 10px 16px; font-size: 14px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0;">
       <option value="en-US">🇺🇸 English (US)</option>
       <option value="en-GB">🇬🇧 English (UK)</option>
@@ -29,6 +33,7 @@
     </button>
   </div>
   
+  <!-- Transcript display area -->
   <div style="
     width: 100%;
     padding: 20px;

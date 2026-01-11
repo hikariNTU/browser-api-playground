@@ -1,4 +1,7 @@
+<!-- Web Speech: Voice Selection with Pitch & Rate Control -->
+<!-- Customize speech synthesis with different voices and parameters -->
 <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+  <!-- Voice selector - populated with available system voices -->
   <select id="voice-select" style="
     padding: 10px;
     border: 1px solid #d1d5db;
@@ -8,12 +11,14 @@
     <option>Loading voices...</option>
   </select>
   
+  <!-- Pitch control: 0.1 (low) to 2 (high) -->
   <div style="display: flex; align-items: center; gap: 12px;">
     <label style="width: 60px; font-size: 14px;">Pitch:</label>
     <input type="range" id="pitch" min="0.1" max="2" step="0.1" value="1" style="flex: 1;">
     <span id="pitch-value" style="width: 30px; font-size: 14px;">1</span>
   </div>
   
+  <!-- Rate control: 0.1 (slow) to 3 (fast) -->
   <div style="display: flex; align-items: center; gap: 12px;">
     <label style="width: 60px; font-size: 14px;">Rate:</label>
     <input type="range" id="rate" min="0.1" max="3" step="0.1" value="1" style="flex: 1;">

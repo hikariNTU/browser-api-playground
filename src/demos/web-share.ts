@@ -1,5 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/web-share.js?raw'
+import defaultHtml from './code/web-share.html?raw'
 import { WebSharePreview } from '@/components/previews'
 
 export const webShareDemo: ApiDemo = {
@@ -11,6 +12,7 @@ export const webShareDemo: ApiDemo = {
   supportCheck: "'share' in navigator",
   compatKey: 'api.Navigator.share',
   defaultCode,
+  defaultHtml,
   PreviewComponent: WebSharePreview,
   examples: [
     {
@@ -18,6 +20,7 @@ export const webShareDemo: ApiDemo = {
       title: 'Share This Page',
       description: 'Open the native share dialog to share URLs, text, and files',
       code: defaultCode,
+      html: defaultHtml,
     },
   ],
 }

@@ -1,0 +1,32 @@
+<!-- Compression Streams API: Compress & Decompress -->
+<!-- Native gzip/deflate compression in the browser -->
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px;">
+  <!-- Text input for content to compress -->
+  <textarea id="input-text" style="width: 100%; height: 100px; padding: 12px; font-family: monospace; font-size: 14px; border: 1px solid #475569; border-radius: 8px; resize: vertical; background: #1e293b; color: #e2e8f0;">Hello, World! This is some text that will be compressed using the Compression Streams API. The more repetitive content, the better the compression ratio!</textarea>
+  
+  <!-- Format selector -->
+  <div id="format-row" style="display: flex; gap: 16px; align-items: center; color: #e2e8f0;">
+    <span style="font-weight: 500;">Format:</span>
+    <label><input type="radio" name="format" value="gzip" checked> gzip</label>
+    <label><input type="radio" name="format" value="deflate"> deflate</label>
+    <label><input type="radio" name="format" value="deflate-raw"> deflate-raw</label>
+  </div>
+  
+  <!-- Action buttons -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button id="compress-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #8b5cf6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      🗜️ Compress
+    </button>
+    <button id="decompress-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer;" disabled>
+      📂 Decompress
+    </button>
+    <button id="compare-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #f59e0b; color: white; border: none; border-radius: 8px; cursor: pointer;">
+      📊 Compare All Formats
+    </button>
+  </div>
+  
+  <!-- Results display -->
+  <div id="result" style="padding: 16px; background: #1e293b; border-radius: 8px; font-family: monospace; font-size: 14px; color: #9ca3af;">
+    Results will appear here...
+  </div>
+</div>

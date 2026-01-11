@@ -1,5 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/gamepad.js?raw'
+import defaultHtml from './code/gamepad.html?raw'
 import { GamepadPreview } from '@/components/previews'
 
 export const gamepadDemo: ApiDemo = {
@@ -11,6 +12,7 @@ export const gamepadDemo: ApiDemo = {
   supportCheck: "'getGamepads' in navigator",
   compatKey: 'api.Gamepad',
   defaultCode,
+  defaultHtml,
   PreviewComponent: GamepadPreview,
   examples: [
     {
@@ -18,6 +20,7 @@ export const gamepadDemo: ApiDemo = {
       title: 'Controller Input',
       description: 'Read buttons, axes, and vibration from connected gamepads',
       code: defaultCode,
+      html: defaultHtml,
     },
   ],
 }

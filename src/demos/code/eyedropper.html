@@ -1,0 +1,14 @@
+<!-- EyeDropper API: Color Picker -->
+<!-- Pick any color from the screen -->
+<div style="display: flex; flex-direction: column; gap: 16px; align-items: center; padding: 16px;">
+  <!-- Color picker button - requires user gesture -->
+  <button id="pick-btn" style="padding: 12px 24px; font-size: 16px; font-weight: 500; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+    🎨 Pick a Color
+  </button>
+  
+  <!-- Color preview area - displays picked color -->
+  <div id="color-result" style="display: none; text-align: center;">
+    <div id="color-preview" style="width: 100px; height: 100px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>
+    <p id="color-value" style="font-family: monospace; margin-top: 8px; color: #e2e8f0;"></p>
+  </div>
+</div>

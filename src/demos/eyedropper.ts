@@ -1,5 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/eyedropper.js?raw'
+import defaultHtml from './code/eyedropper.html?raw'
 import example1Code from './code/eyedropper-ex1.js?raw'
 import example2Code from './code/eyedropper-ex2.js?raw'
 import example2Html from './code/eyedropper-ex2.html?raw'
@@ -15,6 +16,7 @@ export const eyedropperDemo: ApiDemo = {
   supportCheck: "'EyeDropper' in window",
   compatKey: 'api.EyeDropper',
   defaultCode,
+  defaultHtml,
   PreviewComponent: EyeDropperPreview,
   examples: [
     {
@@ -22,6 +24,7 @@ export const eyedropperDemo: ApiDemo = {
       title: 'Pick Color',
       description: 'Pick any color from the screen',
       code: defaultCode,
+      html: defaultHtml,
     },
     {
       id: 'basic-color-picker',
