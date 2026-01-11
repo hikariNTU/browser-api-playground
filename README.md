@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/assets/logo-horizontal.png" alt="Browser API Playground" width="400" />
+  <img src="code/src/assets/logo-horizontal.png" alt="Browser API Playground" width="400" />
 </p>
 
 <h1 align="center">Browser API Playground</h1>
@@ -43,6 +43,9 @@ Built for a Frontend team tech sharing session to demonstrate the capabilities o
 ## 🚀 Getting Started
 
 ```bash
+# Navigate to code directory
+cd code
+
 # Install dependencies
 npm install
 
@@ -56,6 +59,19 @@ npm run build
 npm run preview
 ```
 
+## 📁 Project Structure
+
+```
+browser-api-playground/
+├── code/           # Application code
+│   ├── src/        # Source files
+│   ├── public/     # Static assets
+│   └── ...         # Config files
+├── openspec/       # Specifications
+├── .github/        # Workflows & prompts
+└── README.md       # Documentation
+```
+
 ## 🛠 Tech Stack
 
 - **Vite** - Build tool (rolldown-vite)
@@ -67,7 +83,7 @@ npm run preview
 
 ## 📦 Deployment
 
-The app automatically deploys to GitHub Pages on push to `main`:
+The app automatically deploys to GitHub Pages when code changes are pushed to `main`:
 
 **🌐 Live Demo**: [https://hikarintu.github.io/browser-api-playground/](https://hikarintu.github.io/browser-api-playground/)
 
