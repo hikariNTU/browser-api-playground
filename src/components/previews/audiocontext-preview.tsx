@@ -129,47 +129,57 @@ export function AudioContextPreview() {
         <p className="text-sm text-destructive">AudioContext not supported</p>
       )}
 
-      {isSameOrigin ? (
-        <>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="text-xs text-muted-foreground hover:text-foreground underline cursor-pointer"
+      <div className="flex flex-col items-center gap-1">
+        {isSameOrigin ? (
+          <>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-xs text-muted-foreground hover:text-foreground underline cursor-pointer"
+            >
+              See also: Morse Code Generator →
+            </button>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogContent className="max-w-4xl w-[90vw] h-[80vh] flex flex-col p-0 gap-0">
+                <DialogHeader className="p-4 pb-2 shrink-0">
+                  <DialogTitle className="flex items-center gap-2">
+                    Morse Code Generator
+                    <a
+                      href={MORSE_CODE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </DialogTitle>
+                </DialogHeader>
+                <iframe
+                  src={MORSE_CODE_URL}
+                  className="w-full flex-1 min-h-0 border-t"
+                  title="Morse Code Generator"
+                />
+              </DialogContent>
+            </Dialog>
+          </>
+        ) : (
+          <a
+            href={MORSE_CODE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-foreground underline"
           >
             See also: Morse Code Generator →
-          </button>
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent className="max-w-4xl w-[90vw] h-[80vh] flex flex-col p-0 gap-0">
-              <DialogHeader className="p-4 pb-2 shrink-0">
-                <DialogTitle className="flex items-center gap-2">
-                  Morse Code Generator
-                  <a
-                    href={MORSE_CODE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </DialogTitle>
-              </DialogHeader>
-              <iframe
-                src={MORSE_CODE_URL}
-                className="w-full flex-1 min-h-0 border-t"
-                title="Morse Code Generator"
-              />
-            </DialogContent>
-          </Dialog>
-        </>
-      ) : (
+          </a>
+        )}
         <a
-          href={MORSE_CODE_URL}
+          href="https://studio.yating.tw/music/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs text-muted-foreground hover:text-foreground underline"
         >
-          See also: Morse Code Generator →
+          See also: Yating Music Studio →
         </a>
-      )}
+      </div>
     </div>
   )
 }
