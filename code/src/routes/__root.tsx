@@ -53,9 +53,14 @@ function HoverPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <button
+          type="button"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="appearance-none bg-transparent border-none p-0 cursor-pointer"
+        >
           {children}
-        </span>
+        </button>
       </PopoverTrigger>
       <PopoverContent
         side="right"

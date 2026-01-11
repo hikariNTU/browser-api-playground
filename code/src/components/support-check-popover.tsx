@@ -55,9 +55,14 @@ export function SupportCheckPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <button
+          type="button"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="appearance-none bg-transparent border-none p-0 cursor-pointer"
+        >
           {badge}
-        </span>
+        </button>
       </PopoverTrigger>
       <PopoverContent
         className="w-auto max-w-sm p-3"
