@@ -32,11 +32,11 @@ function extractTitle(content: string): string {
 function formatGroupName(filename: string): string {
   // Convert "01-intro.md" -> "Intro", "02-sample-usecase.md" -> "Sample Usecase"
   return filename
-    .replace(/\.md$/, '')           // Remove .md extension
-    .replace(/^\d+-/, '')            // Remove leading number prefix
-    .split('-')                       // Split on hyphens
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize
-    .join(' ')                        // Join with spaces
+    .replace(/\.md$/, '') // Remove .md extension
+    .replace(/^\d+-/, '') // Remove leading number prefix
+    .split('-') // Split on hyphens
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize
+    .join(' ') // Join with spaces
 }
 
 function parseSlideFile(filename: string, content: string, startIndex: number): Slide[] {

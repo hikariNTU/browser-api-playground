@@ -229,9 +229,7 @@ function SlidePreviewThumbnail({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="text-xs font-medium text-muted-foreground mb-1">
-          Slide {index + 1}
-        </div>
+        <div className="text-xs font-medium text-muted-foreground mb-1">Slide {index + 1}</div>
         <div className="text-sm font-semibold mb-2 truncate">{slide.title}</div>
         <ScrollArea className="h-28">
           <div className="slide-content text-xs leading-relaxed [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs">

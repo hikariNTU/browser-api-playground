@@ -60,7 +60,7 @@
 }
 
 .slide-content ul > li::before {
-  content: "•";
+  content: '•';
   @apply font-bold mt-0.5 shrink-0;
   color: hsl(var(--primary) / 0.7);
 }
@@ -146,7 +146,7 @@
 }
 
 /* Task lists */
-.slide-content input[type="checkbox"] {
+.slide-content input[type='checkbox'] {
   @apply mr-2 rounded;
   border-color: hsl(var(--border));
   accent-color: hsl(var(--primary));

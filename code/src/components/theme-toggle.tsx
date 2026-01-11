@@ -55,9 +55,8 @@ export function ThemeToggle({ iconOnly = false }: ThemeToggleProps) {
       <TooltipTrigger asChild>
         <Button
           variant="ghost"
-          size="sm"
           onClick={toggleTheme}
-          className="w-full justify-start gap-2"
+          className="w-full justify-start gap-2 text-sm"
         >
           {theme === 'light' ? (
             <>
