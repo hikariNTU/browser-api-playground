@@ -282,7 +282,7 @@ function SlidePreviewThumbnail({
         <div className="text-sm font-semibold mb-2 truncate">{slide.title}</div>
         <ScrollArea className="h-28">
           <div className="slide-content origin-top-left scale-50 w-[200%]">
-            <Markdown remarkPlugins={[remarkGfm]}>
+            <Markdown remarkPlugins={[remarkGfm]} components={{ img: SlideMedia }}>
               {slide.content.slice(0, 500) + (slide.content.length > 500 ? '...' : '')}
             </Markdown>
           </div>
@@ -508,12 +508,21 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
   }, [])
 
   const panelRef = useRef<HTMLDivElement>(null)
+  const contentScrollRef = useRef<HTMLDivElement>(null)
   const dragStartRef = useRef({ x: 0, y: 0 })
   const resizeStartRef = useRef({ width: 0, height: 0, x: 0, y: 0, posX: 0, posY: 0 })
   const pinchStartScaleRef = useRef(1)
   const pinchAccumulatorRef = useRef(0)
   const pinchResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pinchCooldownRef = useRef(false)
+
+  // Scroll to top when slide changes
+  useEffect(() => {
+    const viewport = contentScrollRef.current?.closest('[data-slot="scroll-area"]')?.querySelector('[data-slot="scroll-area-viewport"]')
+    if (viewport) {
+      viewport.scrollTop = 0
+    }
+  }, [navigation.currentIndex])
 
   // Compute actual position (default to bottom-right if -1)
   const actualPosition = useMemo(() => {
@@ -1048,7 +1057,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
                 </div>
               ) : (
                 <ScrollArea className="h-full">
-                  <div className="slide-content p-4 max-w-none @container">
+                  <div ref={contentScrollRef} className="slide-content p-4 max-w-none @container">
                     <Markdown
                       remarkPlugins={[remarkGfm]}
                       components={{
