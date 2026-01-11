@@ -21,6 +21,11 @@
   color: hsl(var(--foreground) / 0.85);
 }
 
+/* Remove top margin from first child elements */
+.slide-content > :first-child {
+  @apply mt-0;
+}
+
 .slide-content p {
   @apply text-sm leading-relaxed mb-3;
   color: hsl(var(--foreground) / 0.8);
@@ -56,7 +61,7 @@
 
 .slide-content ul > li::before {
   content: "•";
-  @apply font-bold mt-0.5 flex-shrink-0;
+  @apply font-bold mt-0.5 shrink-0;
   color: hsl(var(--primary) / 0.7);
 }
 

@@ -5,7 +5,9 @@ export interface Slide {
   title: string
   content: string
   fileSource: string
+  fileGroup: string // Display name for the file group (e.g., "01-intro" -> "Intro")
   index: number
+  isFirstInGroup: boolean // True if this is the first slide from its source file
 }
 
 interface SlidesState {
@@ -22,21 +24,34 @@ const slideModules = import.meta.glob('/slides/*.md', {
 })
 
 function extractTitle(content: string): string {
-  // Extract first # heading as title
-  const match = content.match(/^#\s+(.+)$/m)
+  // Extract first heading (any level: #, ##, ###, etc.) as title
+  const match = content.match(/^#{1,6}\s+(.+)$/m)
   return match ? match[1].trim() : 'Untitled Slide'
+}
+
+function formatGroupName(filename: string): string {
+  // Convert "01-intro.md" -> "Intro", "02-sample-usecase.md" -> "Sample Usecase"
+  return filename
+    .replace(/\.md$/, '')           // Remove .md extension
+    .replace(/^\d+-/, '')            // Remove leading number prefix
+    .split('-')                       // Split on hyphens
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize
+    .join(' ')                        // Join with spaces
 }
 
 function parseSlideFile(filename: string, content: string, startIndex: number): Slide[] {
   // Split on --- (horizontal rule) to get individual slides
   const parts = content.split(/\n---\n/).filter((part) => part.trim())
+  const fileGroup = formatGroupName(filename)
 
   return parts.map((part, idx) => ({
     id: `${filename}-${idx}`,
     title: extractTitle(part),
     content: part.trim(),
     fileSource: filename,
+    fileGroup,
     index: startIndex + idx,
+    isFirstInGroup: idx === 0,
   }))
 }
 

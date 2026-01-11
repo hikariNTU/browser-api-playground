@@ -36,7 +36,7 @@ export function MobileNotice() {
     <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
       <div className="bg-card border border-border rounded-lg shadow-lg p-4">
         <div className="flex items-start gap-3">
-          <Monitor className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+          <Monitor className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="font-medium text-sm">Best experienced on desktop</p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -47,7 +47,7 @@ export function MobileNotice() {
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 w-6 p-0 flex-shrink-0"
+            className="h-6 w-6 p-0 shrink-0"
             onClick={handleDismiss}
           >
             <X className="h-4 w-4" />

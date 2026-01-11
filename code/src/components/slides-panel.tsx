@@ -69,12 +69,28 @@ function SlidePreviewStrip({
 }) {
   const stripRef = useRef<HTMLDivElement>(null)
 
+  // Group slides by fileSource
+  const groupedSlides = useMemo(() => {
+    const groups: { name: string; slides: { slide: Slide; globalIndex: number }[] }[] = []
+    let currentGroup: (typeof groups)[0] | null = null
+
+    slides.forEach((slide, idx) => {
+      if (slide.isFirstInGroup || !currentGroup) {
+        currentGroup = { name: slide.fileGroup, slides: [] }
+        groups.push(currentGroup)
+      }
+      currentGroup.slides.push({ slide, globalIndex: idx })
+    })
+
+    return groups
+  }, [slides])
+
   // Scroll to keep current slide visible
   useEffect(() => {
     const strip = stripRef.current
     if (!strip) return
 
-    const currentThumb = strip.children[currentIndex] as HTMLElement
+    const currentThumb = strip.querySelector(`[data-index="${currentIndex}"]`) as HTMLElement
     if (currentThumb) {
       currentThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
     }
@@ -90,7 +106,7 @@ function SlidePreviewStrip({
             size="icon-sm"
             onClick={onPrevious}
             disabled={isFirst}
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <ChevronLeft className="size-4" />
           </Button>
@@ -100,18 +116,35 @@ function SlidePreviewStrip({
         </TooltipContent>
       </Tooltip>
 
-      {/* Thumbnail strip with fade edges */}
-      <div className="flex-1 min-w-0 relative">
-        <ScrollArea className="w-full [mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%-24px),transparent)]">
-          <div ref={stripRef} className="flex gap-1.5 px-6 py-1">
-            {slides.map((slide, idx) => (
-              <SlidePreviewThumbnail
-                key={slide.id}
-                slide={slide}
-                index={idx}
-                isActive={idx === currentIndex}
-                onSelect={() => onSelectSlide(idx)}
-              />
+      {/* Thumbnail strip */}
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <ScrollArea className="w-full">
+          <div ref={stripRef} className="flex py-1 items-start">
+            {groupedSlides.map((group, groupIdx) => (
+              <div
+                key={group.name}
+                className="flex items-start shrink-0"
+                style={{ marginLeft: groupIdx > 0 ? '12px' : '0' }}
+              >
+                {/* Sticky container - 0 width so it doesn't take space */}
+                <div className="sticky left-0 z-10 w-0 h-0">
+                  <span className="absolute top-0 left-0 text-[9px] font-medium text-muted-foreground whitespace-nowrap px-1.5 py-0.5 rounded bg-muted/80 border border-border/50">
+                    {group.name}
+                  </span>
+                </div>
+                {/* Group thumbnails */}
+                <div className="flex gap-1.5">
+                  {group.slides.map(({ slide, globalIndex }) => (
+                    <SlidePreviewThumbnail
+                      key={slide.id}
+                      slide={slide}
+                      index={globalIndex}
+                      isActive={globalIndex === currentIndex}
+                      onSelect={() => onSelectSlide(globalIndex)}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -126,7 +159,7 @@ function SlidePreviewStrip({
             size="icon-sm"
             onClick={onNext}
             disabled={isLast}
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <ChevronRight className="size-4" />
           </Button>
@@ -172,11 +205,12 @@ function SlidePreviewThumbnail({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button
+          data-index={index}
           onClick={onSelect}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           className={cn(
-            'flex-shrink-0 w-16 h-12 rounded border text-[6px] leading-tight p-1 overflow-hidden transition-all',
+            'shrink-0 w-16 h-12 rounded border text-[6px] leading-tight p-1 overflow-hidden transition-all',
             'hover:border-primary/50 hover:bg-accent/50',
             'focus:outline-none focus:ring-2 focus:ring-primary/50',
             isActive

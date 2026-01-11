@@ -49,7 +49,7 @@ function AppendixPage() {
                     <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
                       {api.name}
                     </CardTitle>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
                   </div>
                   <CardDescription className="text-sm leading-relaxed">
                     {api.description}
