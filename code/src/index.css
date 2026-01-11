@@ -189,3 +189,74 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hero gradient animation */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(3deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    -45deg,
+    oklch(0.95 0.05 280),
+    oklch(0.95 0.05 200),
+    oklch(0.95 0.04 150),
+    oklch(0.95 0.05 320)
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+.dark .hero-gradient {
+  background: linear-gradient(
+    -45deg,
+    oklch(0.2 0.05 280),
+    oklch(0.18 0.05 200),
+    oklch(0.18 0.04 150),
+    oklch(0.2 0.05 320)
+  );
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 4s ease-in-out infinite;
+}

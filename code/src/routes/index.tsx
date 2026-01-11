@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { BrowserCompatIcons } from '@/components/browser-compat-icons'
 import { SupportCheckPopover } from '@/components/support-check-popover'
 import logoHorizontal from '@/assets/logo-horizontal.png'
+import { Code2, Sparkles, Zap } from 'lucide-react'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -18,20 +19,59 @@ function HomePage() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-6xl mx-auto px-8 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16 space-y-4">
-          <img
-            src={logoHorizontal}
-            alt="Browser API Playground"
-            className="h-16 mx-auto mb-6 dark:invert"
-          />
-          <h1 className="text-4xl font-bold tracking-tight">Browser API Playground</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Explore powerful browser APIs with live, editable code examples. Pick an API below to
-            start experimenting.
-          </p>
+      {/* Hero Section - Fixed behind content */}
+      <div className="hero-gradient sticky top-0 overflow-hidden">
+        {/* Floating decorative elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-[10%] w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-40 right-[15%] w-48 h-48 bg-primary/5 rounded-full blur-3xl animate-float-delayed" />
+          <div className="absolute bottom-10 left-[30%] w-32 h-32 bg-primary/5 rounded-full blur-2xl animate-float" />
         </div>
+
+        <div className="relative max-w-6xl mx-auto px-8 py-20">
+          <div className="text-center space-y-6">
+            {/* Logo with glow effect */}
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full animate-pulse-ring" />
+              <img
+                src={logoHorizontal}
+                alt="Browser API Playground"
+                className="relative h-20 mx-auto dark:invert"
+              />
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+              Browser API Playground
+            </h1>
+
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Explore powerful browser APIs with live, editable code examples. Pick an API below to
+              start experimenting.
+            </p>
+
+            {/* Feature badges */}
+            <div className="flex flex-wrap justify-center gap-3 pt-4">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 text-sm">
+                <Code2 className="h-4 w-4 text-primary" />
+                <span>Live Code Editor</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 text-sm">
+                <Zap className="h-4 w-4 text-yellow-500" />
+                <span>Instant Preview</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 text-sm">
+                <Sparkles className="h-4 w-4 text-purple-500" />
+                <span>{demos.length}+ API Demos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content section that scrolls over the hero */}
+      <div className="relative -mt-6">
+        <div className="relative bg-background rounded-t-3xl shadow-[0_-4px_20px_rgb(0,0,0,0.08),0_-12px_40px_rgb(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgb(0,0,0,0.25),0_-12px_40px_rgb(0,0,0,0.2)]">
+          <div className="max-w-6xl mx-auto px-8 pt-10 pb-12">
 
         {/* API Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -90,7 +130,18 @@ function HomePage() {
             >
               MDN Web APIs
             </a>
+            {' '}•{' '}
+            <a
+              href="https://github.com/niclin/browser-api-playground"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-foreground transition-colors"
+            >
+              GitHub
+            </a>
           </p>
+        </div>
+          </div>
         </div>
       </div>
     </div>

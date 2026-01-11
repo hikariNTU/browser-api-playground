@@ -66,7 +66,7 @@ function AppendixPage() {
           <p>
             Want to see a demo for one of these APIs?{' '}
             <a
-              href="https://github.com"
+              href="https://github.com/hikariNTU/browser-api-playground/issues"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-foreground transition-colors"

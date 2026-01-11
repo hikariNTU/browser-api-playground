@@ -154,6 +154,7 @@ function SlidePreviewStrip({
             onClick={onPrevious}
             disabled={isFirst}
             className="shrink-0 focus:ring-0 focus-visible:ring-0 focus:outline-none"
+            aria-label="Previous slide"
           >
             <ChevronLeft className="size-4" />
           </Button>
@@ -207,6 +208,7 @@ function SlidePreviewStrip({
             onClick={onNext}
             disabled={isLast}
             className="shrink-0 focus:ring-0 focus-visible:ring-0 focus:outline-none"
+            aria-label="Next slide"
           >
             <ChevronRight className="size-4" />
           </Button>
@@ -877,7 +879,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
       <div
         ref={panelRef}
         className={cn(
-          'fixed z-50 flex flex-col border rounded-lg shadow-xl overflow-hidden',
+          'fixed z-50 flex flex-col border rounded-lg shadow-xl overflow-hidden outline-none',
           // Disable backdrop blur during drag/resize for performance
           isBlurEnabled && !isDragging && !isResizing
             ? 'bg-white/60 dark:bg-background/80 backdrop-blur-xl backdrop-saturate-150 border-white/40 dark:border-border shadow-2xl'
@@ -978,6 +980,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
                         isBlurEnabled && 'text-primary'
                       )}
                       onClick={toggleBlur}
+                      aria-label={isBlurEnabled ? 'Disable glass effect' : 'Enable glass effect'}
                     >
                       <Sparkles className="size-4" />
                     </Button>
@@ -993,6 +996,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
                       size="icon-sm"
                       className="focus:ring-0 focus-visible:ring-0 focus:outline-none"
                       onClick={toggleMinimized}
+                      aria-label="Minimize panel"
                     >
                       <Minimize2 className="size-4" />
                     </Button>
@@ -1007,6 +1011,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
                   className="focus:ring-0 focus-visible:ring-0 focus:outline-none"
                   onClick={() => setIsMaximized(!isMaximized)}
                   title={isMaximized ? 'Restore' : 'Maximize'}
+                  aria-label={isMaximized ? 'Restore panel size' : 'Maximize panel'}
                 >
                   {isMaximized ? (
                     <Minimize2 className="size-4" />
@@ -1020,6 +1025,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
                   className="focus:ring-0 focus-visible:ring-0 focus:outline-none"
                   onClick={onClose}
                   title="Close (Esc)"
+                  aria-label="Close slides panel"
                 >
                   <X className="size-4" />
                 </Button>
