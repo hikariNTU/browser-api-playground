@@ -7,6 +7,7 @@ import {
   type BrowserCompatResult,
 } from '@/lib/browser-compat'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 
@@ -198,9 +199,19 @@ export function BrowserCompatList({
 
   if (loading) {
     return (
-      <div className={cn('flex items-center gap-2 text-sm text-muted-foreground', className)}>
-        <Loader2 className="h-4 w-4 animate-spin" />
-        <span>Loading browser compatibility...</span>
+      <div className={cn('grid grid-cols-2 sm:grid-cols-3 gap-2', className)}>
+        {BROWSER_ORDER.map((browser) => (
+          <div
+            key={browser}
+            className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/50"
+          >
+            <Skeleton className="h-5 w-5 rounded" />
+            <div className="flex flex-col gap-1">
+              <Skeleton className="h-3.5 w-16" />
+              <Skeleton className="h-3 w-12" />
+            </div>
+          </div>
+        ))}
       </div>
     )
   }
