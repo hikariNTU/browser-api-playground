@@ -188,12 +188,13 @@ function RootLayout() {
                             </Badge>
                           </HoverPopover>
                         </Link>
-                        
+
                         {/* Example sub-items (flat list, always visible) */}
                         {hasExamples && (
                           <div className="ml-6 mt-1 space-y-0.5 border-l border-border/50 pl-3">
                             {demo.examples!.map((example) => {
-                              const isExampleActive = currentPath === `/api/${demo.id}/${example.id}`
+                              const isExampleActive =
+                                currentPath === `/api/${demo.id}/${example.id}`
                               return (
                                 <Link
                                   key={example.id}
@@ -202,7 +203,8 @@ function RootLayout() {
                                   className={cn(
                                     'block px-3 py-1.5 rounded-md text-xs transition-colors',
                                     'hover:bg-accent/50 text-muted-foreground hover:text-foreground',
-                                    isExampleActive && 'bg-accent/70 text-accent-foreground font-medium'
+                                    isExampleActive &&
+                                      'bg-accent/70 text-accent-foreground font-medium'
                                   )}
                                 >
                                   {example.title}
@@ -214,7 +216,7 @@ function RootLayout() {
                       </div>
                     )
                   })}
-                  
+
                   {/* More APIs link */}
                   <Link
                     to="/appendix"
@@ -240,93 +242,99 @@ function RootLayout() {
                 <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-card to-transparent z-10 pointer-events-none" />
                 <ScrollArea className="h-full px-2">
                   <nav className="space-y-1 my-2">
-                  {demos.map((demo) => {
-                    const isDemoActive = currentPath === `/api/${demo.id}` || currentPath.startsWith(`/api/${demo.id}/`)
-                    const isSupported = demo.checkSupport()
-                    const hasExamples = demo.examples && demo.examples.length > 0
+                    {demos.map((demo) => {
+                      const isDemoActive =
+                        currentPath === `/api/${demo.id}` ||
+                        currentPath.startsWith(`/api/${demo.id}/`)
+                      const isSupported = demo.checkSupport()
+                      const hasExamples = demo.examples && demo.examples.length > 0
 
-                    return (
-                      <Popover key={demo.id}>
-                        <PopoverTrigger asChild>
-                          <button
-                            className={cn(
-                              'flex items-center justify-center w-12 h-12 rounded-lg text-sm transition-colors',
-                              'hover:bg-accent/50',
-                              isDemoActive && 'bg-accent text-accent-foreground'
-                            )}
-                          >
-                            <div className="relative">
-                              {/* Rounded square with initials */}
-                              <div
-                                className={cn(
-                                  'w-8 h-8 rounded-md flex items-center justify-center text-[10px] font-bold',
-                                  isDemoActive
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'bg-muted text-muted-foreground'
-                                )}
-                              >
-                                {demo.name.slice(0, 2).toUpperCase()}
-                              </div>
-                              {/* Floating support badge */}
-                              <div
-                                className={cn(
-                                  'absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px]',
-                                  isSupported
-                                    ? 'bg-emerald-500 text-white'
-                                    : 'bg-red-500 text-white'
-                                )}
-                              >
-                                {isSupported ? '✓' : '✗'}
-                              </div>
-                            </div>
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent side="right" align="start" className="w-56 p-2">
-                          <div className="space-y-1">
-                            <p className="font-medium text-sm px-2 py-1">{demo.name}</p>
-                            <Link
-                              to="/api/$apiId"
-                              params={{ apiId: demo.id }}
+                      return (
+                        <Popover key={demo.id}>
+                          <PopoverTrigger asChild>
+                            <button
                               className={cn(
-                                'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
+                                'flex items-center justify-center w-12 h-12 rounded-lg text-sm transition-colors',
                                 'hover:bg-accent/50',
-                                currentPath === `/api/${demo.id}` && 'bg-accent text-accent-foreground'
+                                isDemoActive && 'bg-accent text-accent-foreground'
                               )}
                             >
-                              Overview
-                            </Link>
-                            <Link
-                              to="/api/$apiId/$exampleId"
-                              params={{ apiId: demo.id, exampleId: 'default' }}
-                              className={cn(
-                                'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
-                                'hover:bg-accent/50',
-                                currentPath === `/api/${demo.id}/default` && 'bg-accent text-accent-foreground'
-                              )}
-                            >
-                              Default Demo
-                            </Link>
-                            {hasExamples && demo.examples!.map((example) => (
+                              <div className="relative">
+                                {/* Rounded square with initials */}
+                                <div
+                                  className={cn(
+                                    'w-8 h-8 rounded-md flex items-center justify-center text-[10px] font-bold',
+                                    isDemoActive
+                                      ? 'bg-primary text-primary-foreground'
+                                      : 'bg-muted text-muted-foreground'
+                                  )}
+                                >
+                                  {demo.name.slice(0, 2).toUpperCase()}
+                                </div>
+                                {/* Floating support badge */}
+                                <div
+                                  className={cn(
+                                    'absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px]',
+                                    isSupported
+                                      ? 'bg-emerald-500 text-white'
+                                      : 'bg-red-500 text-white'
+                                  )}
+                                >
+                                  {isSupported ? '✓' : '✗'}
+                                </div>
+                              </div>
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent side="right" align="start" className="w-56 p-2">
+                            <div className="space-y-1">
+                              <p className="font-medium text-sm px-2 py-1">{demo.name}</p>
                               <Link
-                                key={example.id}
-                                to="/api/$apiId/$exampleId"
-                                params={{ apiId: demo.id, exampleId: example.id }}
+                                to="/api/$apiId"
+                                params={{ apiId: demo.id }}
                                 className={cn(
                                   'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
                                   'hover:bg-accent/50',
-                                  currentPath === `/api/${demo.id}/${example.id}` && 'bg-accent text-accent-foreground'
+                                  currentPath === `/api/${demo.id}` &&
+                                    'bg-accent text-accent-foreground'
                                 )}
                               >
-                                {example.title}
+                                Overview
                               </Link>
-                            ))}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    )
-                  })}
-                </nav>
-              </ScrollArea>
+                              <Link
+                                to="/api/$apiId/$exampleId"
+                                params={{ apiId: demo.id, exampleId: 'default' }}
+                                className={cn(
+                                  'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
+                                  'hover:bg-accent/50',
+                                  currentPath === `/api/${demo.id}/default` &&
+                                    'bg-accent text-accent-foreground'
+                                )}
+                              >
+                                Default Demo
+                              </Link>
+                              {hasExamples &&
+                                demo.examples!.map((example) => (
+                                  <Link
+                                    key={example.id}
+                                    to="/api/$apiId/$exampleId"
+                                    params={{ apiId: demo.id, exampleId: example.id }}
+                                    className={cn(
+                                      'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
+                                      'hover:bg-accent/50',
+                                      currentPath === `/api/${demo.id}/${example.id}` &&
+                                        'bg-accent text-accent-foreground'
+                                    )}
+                                  >
+                                    {example.title}
+                                  </Link>
+                                ))}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )
+                    })}
+                  </nav>
+                </ScrollArea>
               </div>
             )}
 

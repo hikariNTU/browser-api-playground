@@ -13,6 +13,7 @@ import { compressionStreamsDemo } from './compression-streams'
 import { mediaRecorderDemo } from './media-recorder'
 import { webSpeechDemo } from './web-speech'
 import { deviceExperimentalDemo } from './device-experimental'
+import { broadcastChannelDemo } from './broadcast-channel'
 
 export type { ApiDemo, DemoExample, ExecutionResult, ConsoleMessage } from './types'
 
@@ -25,6 +26,7 @@ export const demos: ApiDemo[] = [
   compressionStreamsDemo,
   mediaRecorderDemo,
   webrtcWebcodecsDemo,
+  broadcastChannelDemo,
   webShareDemo,
   screenWakeLockDemo,
   webSerialDemo,

@@ -23,4 +23,3 @@ pickBtn.onclick = async () => {
 }
 
 console.log('Click the button above to pick a color!')
-

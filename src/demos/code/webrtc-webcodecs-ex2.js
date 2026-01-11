@@ -20,7 +20,8 @@ async function showDeviceSelector() {
     label.textContent = `${emoji} ${title} (${deviceList.length})`
 
     const select = document.createElement('select')
-    select.style.cssText = 'width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; font-size: 14px;'
+    select.style.cssText =
+      'width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; font-size: 14px;'
     select.id = `select-${kind}`
 
     if (deviceList.length === 0) {
@@ -49,7 +50,8 @@ async function showDeviceSelector() {
   // Test selected devices button
   const testBtn = document.createElement('button')
   testBtn.textContent = '🔍 Test Selected Camera'
-  testBtn.style.cssText = 'padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; margin-top: 8px;'
+  testBtn.style.cssText =
+    'padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; margin-top: 8px;'
 
   const previewContainer = document.createElement('div')
   previewContainer.style.cssText = 'margin-top: 16px;'
@@ -75,7 +77,8 @@ async function showDeviceSelector() {
 
       const stopBtn = document.createElement('button')
       stopBtn.textContent = '⏹️ Stop'
-      stopBtn.style.cssText = 'padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px;'
+      stopBtn.style.cssText =
+        'padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px;'
       stopBtn.onclick = () => {
         stream.getTracks().forEach((t) => t.stop())
         previewContainer.innerHTML = '<p style="color: #94a3b8;">Preview stopped</p>'

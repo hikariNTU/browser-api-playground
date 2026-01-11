@@ -77,7 +77,8 @@ compareBtn.onclick = async () => {
 
   let html = `<strong>Format Comparison:</strong><br>Original: ${originalSize} bytes<br><br>`
   html += '<table style="width:100%; border-collapse: collapse; color: #e2e8f0;">'
-  html += '<tr style="border-bottom: 1px solid #475569;"><th style="text-align:left; padding:4px;">Format</th><th style="text-align:right; padding:4px;">Size</th><th style="text-align:right; padding:4px;">Saved</th></tr>'
+  html +=
+    '<tr style="border-bottom: 1px solid #475569;"><th style="text-align:left; padding:4px;">Format</th><th style="text-align:right; padding:4px;">Size</th><th style="text-align:right; padding:4px;">Saved</th></tr>'
 
   results.forEach((r) => {
     html += `<tr><td style="padding:4px;">${r.format}</td><td style="text-align:right; padding:4px;">${r.size} bytes</td><td style="text-align:right; padding:4px; color:#22c55e;">${r.ratio}%</td></tr>`
@@ -90,4 +91,3 @@ compareBtn.onclick = async () => {
 
 console.log('Compression Streams API ready!')
 console.log('Enter text and click Compress, or Compare All Formats.')
-

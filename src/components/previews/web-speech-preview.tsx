@@ -135,10 +135,11 @@ export function WebSpeechPreview() {
       })
       streamRef.current = stream
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognitionClass =
+      // SpeechRecognition types vary across browsers
+      const SpeechRecognitionImpl =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-      const recognition = new SpeechRecognitionClass()
+      const recognition = new SpeechRecognitionImpl()
       recognitionRef.current = recognition
 
       recognition.continuous = false

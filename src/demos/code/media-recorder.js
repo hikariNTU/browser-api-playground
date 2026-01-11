@@ -12,7 +12,9 @@ let audioChunks = []
 async function populateMicrophoneList() {
   try {
     // Request permission first to get device labels
-    await navigator.mediaDevices.getUserMedia({ audio: true }).then((s) => s.getTracks().forEach((t) => t.stop()))
+    await navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((s) => s.getTracks().forEach((t) => t.stop()))
 
     const devices = await navigator.mediaDevices.enumerateDevices()
     const mics = devices.filter((d) => d.kind === 'audioinput')

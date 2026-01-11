@@ -115,7 +115,8 @@ async function getScreenInfo() {
 
     // Legend
     const legend = document.createElement('div')
-    legend.style.cssText = 'display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: #94a3b8;'
+    legend.style.cssText =
+      'display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: #94a3b8;'
     legend.innerHTML = `
       <span><span style="display: inline-block; width: 10px; height: 10px; background: #3b82f6; border-radius: 2px; margin-right: 4px;"></span>Primary</span>
       <span><span style="display: inline-block; width: 10px; height: 10px; background: #6b7280; border-radius: 2px; margin-right: 4px;"></span>Secondary</span>

@@ -28,8 +28,8 @@ function AppendixPage() {
           </Link>
           <h1 className="text-4xl font-bold tracking-tight">More Browser APIs</h1>
           <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            Additional browser APIs worth knowing about. These don't have interactive demos yet,
-            but you can explore them on MDN.
+            Additional browser APIs worth knowing about. These don't have interactive demos yet, but
+            you can explore them on MDN.
           </p>
         </div>
 

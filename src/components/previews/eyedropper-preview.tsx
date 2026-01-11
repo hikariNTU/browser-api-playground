@@ -30,13 +30,13 @@ export function EyeDropperPreview() {
       <p className="text-sm text-muted-foreground text-center">
         Click the button to pick any color from your screen
       </p>
-      
+
       <div className="flex items-center gap-4">
         <Button onClick={pickColor} className="gap-2">
           <Pipette className="h-4 w-4" />
           Pick Color
         </Button>
-        
+
         {color && (
           <div className="flex items-center gap-2">
             <div
@@ -47,10 +47,8 @@ export function EyeDropperPreview() {
           </div>
         )}
       </div>
-      
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   )
 }

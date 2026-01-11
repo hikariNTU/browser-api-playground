@@ -9,7 +9,7 @@ function loadLiteGraph() {
       resolve()
       return
     }
-    
+
     const script = document.createElement('script')
     script.src = 'https://cdn.jsdelivr.net/npm/litegraph.js@0.7.18/build/litegraph.min.js'
     script.onload = () => {
@@ -21,67 +21,69 @@ function loadLiteGraph() {
   })
 }
 
-loadLiteGraph().then(() => {
-  // Hide loading message, show editor FIRST
-  document.getElementById('loading-msg').style.display = 'none'
-  document.getElementById('editor-container').style.display = 'flex'
-  
-  // State object to share across functions
-  const state = {
-    audioCtx: null,
-    isPlaying: false
-  }
-  const audioNodes = new Map() // Map LiteGraph node IDs to Web Audio nodes
+loadLiteGraph()
+  .then(() => {
+    // Hide loading message, show editor FIRST
+    document.getElementById('loading-msg').style.display = 'none'
+    document.getElementById('editor-container').style.display = 'flex'
 
-  // Initialize LiteGraph - need to wait a frame for layout to complete
-  const canvasEl = document.getElementById('graph-canvas')
-  
-  // Use requestAnimationFrame to ensure container is laid out before measuring
-  requestAnimationFrame(() => {
-    // Fix canvas resolution to match display size (prevents mouse offset issues)
-    const rect = canvasEl.getBoundingClientRect()
-    canvasEl.width = rect.width || 700
-    canvasEl.height = rect.height || 400
-    
-    const graph = new LGraph()
-    const canvas = new LGraphCanvas(canvasEl, graph)
-    canvas.background_image = null
-    
-    // Resize handler - LiteGraph needs special handling
-    let resizeTimeout = null
-    const resizeCanvas = () => {
-      // Debounce resize to avoid excessive redraws
-      if (resizeTimeout) clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(() => {
-        const rect = canvasEl.getBoundingClientRect()
-        if (rect.width > 0 && rect.height > 0) {
-          // Update canvas buffer size to match CSS size
-          canvasEl.width = rect.width
-          canvasEl.height = rect.height
-          // Tell LiteGraph about the new size
-          canvas.resize(rect.width, rect.height)
-          canvas.setDirty(true, true)
-        }
-      }, 50)
+    // State object to share across functions
+    const state = {
+      audioCtx: null,
+      isPlaying: false,
     }
-    window.addEventListener('resize', resizeCanvas)
-    
-    // Use ResizeObserver for more reliable container size detection
-    const resizeObserver = new ResizeObserver(() => {
-      resizeCanvas()
+    const audioNodes = new Map() // Map LiteGraph node IDs to Web Audio nodes
+
+    // Initialize LiteGraph - need to wait a frame for layout to complete
+    const canvasEl = document.getElementById('graph-canvas')
+
+    // Use requestAnimationFrame to ensure container is laid out before measuring
+    requestAnimationFrame(() => {
+      // Fix canvas resolution to match display size (prevents mouse offset issues)
+      const rect = canvasEl.getBoundingClientRect()
+      canvasEl.width = rect.width || 700
+      canvasEl.height = rect.height || 400
+
+      const graph = new LGraph()
+      const canvas = new LGraphCanvas(canvasEl, graph)
+      canvas.background_image = null
+
+      // Resize handler - LiteGraph needs special handling
+      let resizeTimeout = null
+      const resizeCanvas = () => {
+        // Debounce resize to avoid excessive redraws
+        if (resizeTimeout) clearTimeout(resizeTimeout)
+        resizeTimeout = setTimeout(() => {
+          const rect = canvasEl.getBoundingClientRect()
+          if (rect.width > 0 && rect.height > 0) {
+            // Update canvas buffer size to match CSS size
+            canvasEl.width = rect.width
+            canvasEl.height = rect.height
+            // Tell LiteGraph about the new size
+            canvas.resize(rect.width, rect.height)
+            canvas.setDirty(true, true)
+          }
+        }, 50)
+      }
+      window.addEventListener('resize', resizeCanvas)
+
+      // Use ResizeObserver for more reliable container size detection
+      const resizeObserver = new ResizeObserver(() => {
+        resizeCanvas()
+      })
+      resizeObserver.observe(canvasEl.parentElement)
+
+      initializeNodes(graph, canvas, state, audioNodes)
     })
-    resizeObserver.observe(canvasEl.parentElement)
-    
-    initializeNodes(graph, canvas, state, audioNodes)
   })
-}).catch((err) => {
-  const loadingMsg = document.getElementById('loading-msg')
-  if (loadingMsg) {
-    loadingMsg.textContent = '❌ ' + err.message
-    loadingMsg.style.color = '#ef4444'
-  }
-  console.error(err.message)
-})
+  .catch((err) => {
+    const loadingMsg = document.getElementById('loading-msg')
+    if (loadingMsg) {
+      loadingMsg.textContent = '❌ ' + err.message
+      loadingMsg.style.color = '#ef4444'
+    }
+    console.error(err.message)
+  })
 
 function initializeNodes(graph, canvas, state, audioNodes) {
   // Register custom Audio nodes
@@ -91,14 +93,26 @@ function initializeNodes(graph, canvas, state, audioNodes) {
     this.addOutput('audio', 'audio')
     this.addProperty('frequency', 440)
     this.addProperty('type', 'sine')
-    this.addWidget('number', 'Freq', 440, (v) => {
-      this.properties.frequency = v
-      this.updateAudioNode()
-    }, { min: 20, max: 2000 })
-    this.addWidget('combo', 'Type', 'sine', (v) => {
-      this.properties.type = v
-      this.updateAudioNode()
-    }, { values: ['sine', 'square', 'sawtooth', 'triangle'] })
+    this.addWidget(
+      'number',
+      'Freq',
+      440,
+      (v) => {
+        this.properties.frequency = v
+        this.updateAudioNode()
+      },
+      { min: 20, max: 2000 }
+    )
+    this.addWidget(
+      'combo',
+      'Type',
+      'sine',
+      (v) => {
+        this.properties.type = v
+        this.updateAudioNode()
+      },
+      { values: ['sine', 'square', 'sawtooth', 'triangle'] }
+    )
     this.size = [180, 100]
     this.color = '#3b82f6'
     this.bgcolor = '#1e3a5f'
@@ -139,10 +153,16 @@ function initializeNodes(graph, canvas, state, audioNodes) {
     this.addInput('audio 3', 'audio')
     this.addOutput('audio', 'audio')
     this.addProperty('gain', 0.5)
-    this.addWidget('slider', 'Volume', 0.5, (v) => {
-      this.properties.gain = v
-      this.updateAudioNode()
-    }, { min: 0, max: 1 })
+    this.addWidget(
+      'slider',
+      'Volume',
+      0.5,
+      (v) => {
+        this.properties.gain = v
+        this.updateAudioNode()
+      },
+      { min: 0, max: 1 }
+    )
     this.size = [180, 110]
     this.color = '#8b5cf6'
     this.bgcolor = '#3d2d5f'
@@ -178,14 +198,26 @@ function initializeNodes(graph, canvas, state, audioNodes) {
     this.addOutput('audio', 'audio')
     this.addProperty('frequency', 1000)
     this.addProperty('type', 'lowpass')
-    this.addWidget('number', 'Cutoff', 1000, (v) => {
-      this.properties.frequency = v
-      this.updateAudioNode()
-    }, { min: 20, max: 10000 })
-    this.addWidget('combo', 'Type', 'lowpass', (v) => {
-      this.properties.type = v
-      this.updateAudioNode()
-    }, { values: ['lowpass', 'highpass', 'bandpass', 'notch'] })
+    this.addWidget(
+      'number',
+      'Cutoff',
+      1000,
+      (v) => {
+        this.properties.frequency = v
+        this.updateAudioNode()
+      },
+      { min: 20, max: 10000 }
+    )
+    this.addWidget(
+      'combo',
+      'Type',
+      'lowpass',
+      (v) => {
+        this.properties.type = v
+        this.updateAudioNode()
+      },
+      { values: ['lowpass', 'highpass', 'bandpass', 'notch'] }
+    )
     this.size = [180, 100]
     this.color = '#f59e0b'
     this.bgcolor = '#5f4a1e'
@@ -223,10 +255,16 @@ function initializeNodes(graph, canvas, state, audioNodes) {
     this.addOutput('audio', 'audio')
     this.addOutput('dry', 'audio') // Pass-through for dry signal
     this.addProperty('delayTime', 0.3)
-    this.addWidget('slider', 'Delay (s)', 0.3, (v) => {
-      this.properties.delayTime = v
-      this.updateAudioNode()
-    }, { min: 0, max: 1 })
+    this.addWidget(
+      'slider',
+      'Delay (s)',
+      0.3,
+      (v) => {
+        this.properties.delayTime = v
+        this.updateAudioNode()
+      },
+      { min: 0, max: 1 }
+    )
     this.size = [180, 80]
     this.color = '#ec4899'
     this.bgcolor = '#5f1e3a'
@@ -279,38 +317,38 @@ function initializeNodes(graph, canvas, state, audioNodes) {
   LiteGraph.registerNodeType('audio/destination', DestinationNode)
 
   // Create initial nodes - a richer demo graph
-  
+
   // Two oscillators for a chord
   const oscNode1 = LiteGraph.createNode('audio/oscillator')
   oscNode1.pos = [50, 50]
   oscNode1.properties.frequency = 261.63 // C4
   graph.add(oscNode1)
-  
+
   const oscNode2 = LiteGraph.createNode('audio/oscillator')
   oscNode2.pos = [50, 180]
   oscNode2.properties.frequency = 329.63 // E4
   oscNode2.properties.type = 'triangle'
   graph.add(oscNode2)
-  
+
   // Filter for tone shaping
   const filterNode = LiteGraph.createNode('audio/filter')
   filterNode.pos = [270, 50]
   filterNode.properties.frequency = 800
   filterNode.properties.type = 'lowpass'
   graph.add(filterNode)
-  
+
   // Mixer/gain node
   const gainNode = LiteGraph.createNode('audio/gain')
   gainNode.pos = [270, 200]
   gainNode.properties.gain = 0.3
   graph.add(gainNode)
-  
+
   // Delay for echo effect
   const delayNode = LiteGraph.createNode('audio/delay')
   delayNode.pos = [480, 120]
   delayNode.properties.delayTime = 0.25
   graph.add(delayNode)
-  
+
   // Final output
   const destNode = LiteGraph.createNode('audio/destination')
   destNode.pos = [680, 150]
@@ -321,7 +359,7 @@ function initializeNodes(graph, canvas, state, audioNodes) {
   oscNode1.connect(0, filterNode, 0)
   oscNode2.connect(0, gainNode, 0)
   filterNode.connect(0, delayNode, 0)
-  gainNode.connect(0, destNode, 1)  // Direct to output (dry)
+  gainNode.connect(0, destNode, 1) // Direct to output (dry)
   delayNode.connect(0, destNode, 0) // Delayed signal (wet)
 
   // Play/Stop logic

@@ -39,4 +39,3 @@ if (navigator.share) {
   shareBtn.style.opacity = '0.5'
   status.textContent = '⚠️ Web Share not supported in this browser'
 }
-

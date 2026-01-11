@@ -7,7 +7,7 @@ export function WebSharePreview() {
 
   const handleShare = async () => {
     if (!isSupported) return
-    
+
     try {
       await navigator.share({
         title: 'Browser API Playground',
@@ -22,7 +22,7 @@ export function WebSharePreview() {
         setStatus('error')
       }
     }
-    
+
     setTimeout(() => setStatus('idle'), 3000)
   }
 

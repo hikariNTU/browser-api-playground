@@ -28,10 +28,7 @@ export function IntroPage({ demo }: IntroPageProps) {
           <div className="space-y-1">
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-semibold tracking-tight">{demo.name}</h1>
-              <SupportCheckPopover
-                isSupported={isSupported}
-                supportCheck={demo.supportCheck}
-              />
+              <SupportCheckPopover isSupported={isSupported} supportCheck={demo.supportCheck} />
             </div>
             <p className="text-muted-foreground">{demo.description}</p>
           </div>

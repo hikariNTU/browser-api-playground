@@ -65,9 +65,7 @@ export function GamepadPreview() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Gamepad2 className="h-10 w-10 text-emerald-500" />
-      <p className="text-xs text-muted-foreground text-center truncate max-w-full">
-        {gamepad.id}
-      </p>
+      <p className="text-xs text-muted-foreground text-center truncate max-w-full">{gamepad.id}</p>
 
       <div className="flex gap-6">
         {/* Buttons visualization */}
@@ -78,9 +76,7 @@ export function GamepadPreview() {
               <div
                 key={i}
                 className={`w-5 h-5 rounded text-[10px] flex items-center justify-center ${
-                  pressed
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-muted text-muted-foreground'
+                  pressed ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {i}
@@ -103,9 +99,7 @@ export function GamepadPreview() {
                     }}
                   />
                 </div>
-                <span className="text-[10px] text-muted-foreground">
-                  {value.toFixed(2)}
-                </span>
+                <span className="text-[10px] text-muted-foreground">{value.toFixed(2)}</span>
               </div>
             ))}
           </div>

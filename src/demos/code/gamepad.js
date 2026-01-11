@@ -26,7 +26,8 @@ function updateGamepadDisplay() {
     vibrateBtn = document.createElement('button')
     vibrateBtn.id = 'vibrate-btn'
     vibrateBtn.textContent = '📳 Test Vibration'
-    vibrateBtn.style.cssText = 'padding: 10px 20px; background: #8b5cf6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-weight: 500;'
+    vibrateBtn.style.cssText =
+      'padding: 10px 20px; background: #8b5cf6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 12px; font-weight: 500;'
     vibrateBtn.onclick = async () => {
       const gp = [...navigator.getGamepads()].find((g) => g?.vibrationActuator)
       if (gp?.vibrationActuator) {

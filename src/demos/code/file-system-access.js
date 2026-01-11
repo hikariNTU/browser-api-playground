@@ -121,4 +121,3 @@ dirBtn.onclick = async () => {
 
 console.log('File System Access API ready!')
 console.log('Click Open to read a file, Save to write, or Browse Directory.')
-

@@ -29,7 +29,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Storage_API',
     compatKey: 'api.StorageManager',
   },
-  
+
   // Network APIs
   {
     name: 'WebSocket',
@@ -49,7 +49,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API',
     compatKey: 'api.fetch',
   },
-  
+
   // Graphics APIs
   {
     name: 'Canvas API',
@@ -69,7 +69,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API',
     compatKey: 'api.GPU',
   },
-  
+
   // Worker APIs
   {
     name: 'Web Workers',
@@ -83,7 +83,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API',
     compatKey: 'api.ServiceWorker',
   },
-  
+
   // Media APIs
   {
     name: 'Picture-in-Picture',
@@ -109,7 +109,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API',
     compatKey: 'api.MIDIAccess',
   },
-  
+
   // Security APIs
   {
     name: 'Web Crypto',
@@ -129,7 +129,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API',
     compatKey: 'api.Permissions',
   },
-  
+
   // UI APIs
   {
     name: 'Notifications API',
@@ -155,7 +155,7 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API',
     compatKey: 'api.Element.requestPointerLock',
   },
-  
+
   // Observer APIs
   {
     name: 'Intersection Observer',
@@ -175,19 +175,13 @@ export const appendixApis: AppendixApi[] = [
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver',
     compatKey: 'api.MutationObserver',
   },
-  
+
   // Other APIs
   {
     name: 'Performance API',
     description: 'Measure timing and performance metrics.',
     mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Performance_API',
     compatKey: 'api.Performance',
-  },
-  {
-    name: 'Broadcast Channel',
-    description: 'Cross-tab messaging.',
-    mdnUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API',
-    compatKey: 'api.BroadcastChannel',
   },
   {
     name: 'Web NFC',

@@ -36,7 +36,8 @@ async function runEncodeDecode() {
   `
 
   const statsDiv = document.createElement('div')
-  statsDiv.style.cssText = 'width: 100%; font-family: monospace; font-size: 13px; background: #1e293b; padding: 12px; border-radius: 8px; color: #e2e8f0;'
+  statsDiv.style.cssText =
+    'width: 100%; font-family: monospace; font-size: 13px; background: #1e293b; padding: 12px; border-radius: 8px; color: #e2e8f0;'
 
   container.appendChild(inputVideo)
   container.appendChild(outputCanvas)
@@ -46,7 +47,7 @@ async function runEncodeDecode() {
 
   function updateStats() {
     const elapsed = (performance.now() - startTime) / 1000
-    const bitrate = totalEncodedBytes * 8 / elapsed / 1000
+    const bitrate = (totalEncodedBytes * 8) / elapsed / 1000
     statsDiv.innerHTML = `
       <div>⏱️ Elapsed: ${elapsed.toFixed(1)}s</div>
       <div>📤 Encoded: ${encodedFrames} frames (${(totalEncodedBytes / 1024).toFixed(1)} KB)</div>
@@ -124,7 +125,8 @@ async function runEncodeDecode() {
     // Stop button
     const stopBtn = document.createElement('button')
     stopBtn.textContent = '⏹️ Stop Pipeline'
-    stopBtn.style.cssText = 'padding: 10px 20px; margin: 12px 0; cursor: pointer; background: #ef4444; color: white; border: none; border-radius: 6px; font-weight: 500;'
+    stopBtn.style.cssText =
+      'padding: 10px 20px; margin: 12px 0; cursor: pointer; background: #ef4444; color: white; border: none; border-radius: 6px; font-weight: 500;'
     stopBtn.onclick = async () => {
       running = false
       stream.getTracks().forEach((t) => t.stop())

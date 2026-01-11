@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 export function FileSystemAccessPreview() {
-  const [fileInfo, setFileInfo] = useState<{ name: string; size: number; type: string } | null>(null)
+  const [fileInfo, setFileInfo] = useState<{ name: string; size: number; type: string } | null>(
+    null
+  )
   const [content, setContent] = useState<string | null>(null)
   const isSupported = 'showOpenFilePicker' in window
 
   const handleOpenFile = async () => {
     if (!isSupported) return
-    
+
     try {
       // @ts-expect-error - showOpenFilePicker is not in TypeScript yet
       const [fileHandle] = await window.showOpenFilePicker({
@@ -19,14 +21,14 @@ export function FileSystemAccessPreview() {
           },
         ],
       })
-      
+
       const file = await fileHandle.getFile()
       setFileInfo({
         name: file.name,
         size: file.size,
         type: file.type || 'unknown',
       })
-      
+
       // Read first 500 chars
       const text = await file.text()
       setContent(text.slice(0, 500) + (text.length > 500 ? '...' : ''))
@@ -48,9 +50,7 @@ export function FileSystemAccessPreview() {
 
   return (
     <div className="space-y-4">
-      <Button onClick={handleOpenFile}>
-        📂 Open a Text File
-      </Button>
+      <Button onClick={handleOpenFile}>📂 Open a Text File</Button>
 
       {fileInfo && (
         <div className="p-4 bg-muted/50 rounded-lg space-y-2">
@@ -63,7 +63,7 @@ export function FileSystemAccessPreview() {
               </div>
             </div>
           </div>
-          
+
           {content && (
             <pre className="mt-3 p-3 bg-background rounded text-xs overflow-auto max-h-32 border">
               {content}

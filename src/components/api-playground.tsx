@@ -70,7 +70,7 @@ function clearStoredHtml(demoId: string, exampleId: string) {
 export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
   // Tab state for switching between JS and HTML editors
   const [activeTab, setActiveTab] = useState<'js' | 'html'>('js')
-  
+
   // Use lazy initializer to load stored code on mount
   const [code, setCode] = useState(() => {
     const stored = getStoredCode(demo.id, example.id)
@@ -202,28 +202,31 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleRun, handleFormat])
 
-  const handleEditorMount = useCallback((editor: editor.IStandaloneCodeEditor, monacoInstance: Monaco) => {
-    editorRef.current = editor
+  const handleEditorMount = useCallback(
+    (editor: editor.IStandaloneCodeEditor, monacoInstance: Monaco) => {
+      editorRef.current = editor
 
-    // Add experimental browser API type definitions to suppress type errors (for JS only)
-    monacoInstance.languages.typescript.javascriptDefaults.addExtraLib(
-      experimentalBrowserAPITypes,
-      'experimental-browser-apis.d.ts'
-    )
+      // Add experimental browser API type definitions to suppress type errors (for JS only)
+      monacoInstance.languages.typescript.javascriptDefaults.addExtraLib(
+        experimentalBrowserAPITypes,
+        'experimental-browser-apis.d.ts'
+      )
 
-    // Add Cmd+Enter to run code (works when editor is focused)
-    editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.Enter, () => {
-      handleRunRef.current()
-    })
+      // Add Cmd+Enter to run code (works when editor is focused)
+      editor.addCommand(monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.Enter, () => {
+        handleRunRef.current()
+      })
 
-    // Add Cmd+Shift+P for Monaco command palette
-    editor.addCommand(
-      monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyMod.Shift | monacoInstance.KeyCode.KeyP,
-      () => {
-        editor.trigger('keyboard', 'editor.action.quickCommand', null)
-      }
-    )
-  }, [])
+      // Add Cmd+Shift+P for Monaco command palette
+      editor.addCommand(
+        monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyMod.Shift | monacoInstance.KeyCode.KeyP,
+        () => {
+          editor.trigger('keyboard', 'editor.action.quickCommand', null)
+        }
+      )
+    },
+    []
+  )
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -392,9 +395,7 @@ export function ApiPlayground({ demo, example }: ApiPlaygroundProps) {
                 >
                   <FileCode className="h-4 w-4" />
                   JavaScript
-                  {isJsModified && (
-                    <Circle className="h-1.5 w-1.5 fill-amber-500 text-amber-500" />
-                  )}
+                  {isJsModified && <Circle className="h-1.5 w-1.5 fill-amber-500 text-amber-500" />}
                 </button>
                 <button
                   onClick={() => setActiveTab('html')}
