@@ -2,30 +2,28 @@ import { useState, useRef, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+
 export function ViewTransitionsPreview() {
   const [count, setCount] = useState(0)
   const [color, setColor] = useState('#3b82f6')
   const boxRef = useRef<HTMLDivElement>(null)
   const isSupported = 'startViewTransition' in document
 
-  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
-
   const handleIncrement = useCallback(() => {
     if (isSupported) {
-      // @ts-ignore - startViewTransition not in TypeScript
       document.startViewTransition(() => {
         setCount((c) => c + 1)
-        setColor(colors[(count + 1) % colors.length])
+        setColor(COLORS[(count + 1) % COLORS.length])
       })
     } else {
       setCount((c) => c + 1)
-      setColor(colors[(count + 1) % colors.length])
+      setColor(COLORS[(count + 1) % COLORS.length])
     }
   }, [count, isSupported])
 
   const handleReset = useCallback(() => {
     if (isSupported) {
-      // @ts-ignore - startViewTransition not in TypeScript
       document.startViewTransition(() => {
         setCount(0)
         setColor('#3b82f6')
@@ -39,21 +37,19 @@ export function ViewTransitionsPreview() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <Button onClick={handleIncrement}>
-          ✨ Increment
-        </Button>
+        <Button onClick={handleIncrement}>✨ Increment</Button>
         <Button variant="outline" onClick={handleReset}>
           Reset
         </Button>
       </div>
 
-      <div 
+      <div
         ref={boxRef}
         className={cn(
-          "w-32 h-32 rounded-xl flex items-center justify-center transition-all",
-          "shadow-lg"
+          'w-32 h-32 rounded-xl flex items-center justify-center transition-all',
+          'shadow-lg'
         )}
-        style={{ 
+        style={{
           backgroundColor: color,
           viewTransitionName: 'counter-box',
         }}
@@ -62,10 +58,9 @@ export function ViewTransitionsPreview() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        {isSupported 
+        {isSupported
           ? '✅ View Transitions API is supported! Click to see smooth animations.'
-          : '❌ View Transitions API not supported. Animations will be instant.'
-        }
+          : '❌ View Transitions API not supported. Animations will be instant.'}
       </p>
 
       <style>{`

@@ -17,20 +17,20 @@ export function WindowManagementPreview() {
 
   const requestPermission = async () => {
     if (!isSupported) return
-    
+
     try {
       // @ts-expect-error - getScreenDetails not in TypeScript
-      const screenDetails = await window.getScreenDetails()
+      const screenDetails = (await window.getScreenDetails()) as { screens: ScreenInfo[] }
       setHasPermission(true)
-      
-      const screenList: ScreenInfo[] = screenDetails.screens.map((screen: any, i: number) => ({
+
+      const screenList: ScreenInfo[] = screenDetails.screens.map((screen, i) => ({
         label: screen.label || `Screen ${i + 1}`,
         width: screen.width,
         height: screen.height,
         isPrimary: screen.isPrimary,
         isInternal: screen.isInternal,
       }))
-      
+
       setScreens(screenList)
     } catch (error) {
       if ((error as Error).name === 'NotAllowedError') {
@@ -43,13 +43,18 @@ export function WindowManagementPreview() {
   useEffect(() => {
     // Show basic screen info if API not supported
     if (!isSupported) {
-      setScreens([{
-        label: 'Current Screen',
-        width: window.screen.width,
-        height: window.screen.height,
-        isPrimary: true,
-        isInternal: true,
-      }])
+      // Defer state update to avoid sync setState in effect
+      queueMicrotask(() => {
+        setScreens([
+          {
+            label: 'Current Screen',
+            width: window.screen.width,
+            height: window.screen.height,
+            isPrimary: true,
+            isInternal: true,
+          },
+        ])
+      })
     }
   }, [isSupported])
 
@@ -60,7 +65,7 @@ export function WindowManagementPreview() {
           <p>Window Management API is not supported in this browser.</p>
           <p className="text-sm mt-1">Try Chrome with the flag enabled.</p>
         </div>
-        
+
         <div className="p-4 bg-muted/50 rounded-lg">
           <div className="text-sm font-medium mb-2">Basic Screen Info:</div>
           <div className="text-sm text-muted-foreground">
@@ -74,11 +79,9 @@ export function WindowManagementPreview() {
   return (
     <div className="space-y-4">
       {hasPermission === null && (
-        <Button onClick={requestPermission}>
-          🖥️ Detect Connected Screens
-        </Button>
+        <Button onClick={requestPermission}>🖥️ Detect Connected Screens</Button>
       )}
-      
+
       {hasPermission === false && (
         <div className="p-4 bg-amber-500/10 rounded-lg text-amber-600 dark:text-amber-400 text-sm">
           Permission denied. Please allow screen access to use this feature.
@@ -90,14 +93,14 @@ export function WindowManagementPreview() {
           <div className="text-sm font-medium">
             {screens.length} screen{screens.length > 1 ? 's' : ''} detected
           </div>
-          
+
           <div className="grid gap-3">
             {screens.map((screen, i) => (
-              <div 
+              <div
                 key={i}
                 className={cn(
-                  "p-4 rounded-lg border",
-                  screen.isPrimary ? "bg-primary/5 border-primary/20" : "bg-muted/50"
+                  'p-4 rounded-lg border',
+                  screen.isPrimary ? 'bg-primary/5 border-primary/20' : 'bg-muted/50'
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">

@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getBrowserCompat, getBrowserCompatAsync, BROWSER_INFO, type BrowserKey, type BrowserCompatResult } from '@/lib/browser-compat'
+import {
+  getBrowserCompat,
+  getBrowserCompatAsync,
+  BROWSER_INFO,
+  type BrowserKey,
+  type BrowserCompatResult,
+} from '@/lib/browser-compat'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
@@ -14,36 +20,58 @@ const BROWSER_ORDER: BrowserKey[] = ['chrome', 'firefox', 'safari', 'safari_ios'
 /**
  * Hook to load browser compat data asynchronously
  */
-function useBrowserCompat(compatKey?: string): { compat: BrowserCompatResult | null; loading: boolean } {
+function useBrowserCompat(compatKey?: string): {
+  compat: BrowserCompatResult | null
+  loading: boolean
+} {
   // Try sync first (cached)
   const syncResult = compatKey ? getBrowserCompat(compatKey) : null
   const [compat, setCompat] = useState<BrowserCompatResult | null>(syncResult)
   const [loading, setLoading] = useState(!syncResult && !!compatKey)
 
   useEffect(() => {
+    let cancelled = false
+
     if (!compatKey) {
-      setCompat(null)
-      setLoading(false)
-      return
+      // Defer state updates to avoid sync setState in effect
+      queueMicrotask(() => {
+        if (cancelled) return
+        setCompat(null)
+        setLoading(false)
+      })
+      return () => {
+        cancelled = true
+      }
     }
 
     // If we already have sync result, no need to fetch
     const cached = getBrowserCompat(compatKey)
     if (cached) {
-      setCompat(cached)
-      setLoading(false)
-      return
+      queueMicrotask(() => {
+        if (cancelled) return
+        setCompat(cached)
+        setLoading(false)
+      })
+      return () => {
+        cancelled = true
+      }
     }
 
     // Fetch async
-    setLoading(true)
+    queueMicrotask(() => {
+      if (!cancelled) setLoading(true)
+    })
     getBrowserCompatAsync(compatKey)
       .then((result) => {
-        setCompat(result)
+        if (!cancelled) setCompat(result)
       })
       .finally(() => {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [compatKey])
 
   return { compat, loading }
@@ -100,7 +128,7 @@ const BROWSER_ICONS: Record<BrowserKey, React.FC<{ className?: string }>> = {
 
 export function BrowserCompatIcons({ compatKey, size = 'sm', className }: BrowserCompatIconsProps) {
   const { compat, loading } = useBrowserCompat(compatKey)
-  
+
   if (loading) {
     return (
       <div className={cn('flex items-center gap-1', className)}>
@@ -108,7 +136,7 @@ export function BrowserCompatIcons({ compatKey, size = 'sm', className }: Browse
       </div>
     )
   }
-  
+
   if (!compat) {
     return (
       <div className={cn('flex items-center gap-1', className)}>
@@ -116,16 +144,16 @@ export function BrowserCompatIcons({ compatKey, size = 'sm', className }: Browse
       </div>
     )
   }
-  
+
   const iconSizeClass = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'
-  
+
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
       {BROWSER_ORDER.map((browser) => {
         const support = compat[browser]
         const info = BROWSER_INFO[browser]
         const IconComponent = BROWSER_ICONS[browser]
-        
+
         return (
           <Tooltip key={browser}>
             <TooltipTrigger asChild>
@@ -158,9 +186,15 @@ export function BrowserCompatIcons({ compatKey, size = 'sm', className }: Browse
 }
 
 // Larger variant for intro pages with full browser names
-export function BrowserCompatList({ compatKey, className }: { compatKey?: string; className?: string }) {
+export function BrowserCompatList({
+  compatKey,
+  className,
+}: {
+  compatKey?: string
+  className?: string
+}) {
   const { compat, loading } = useBrowserCompat(compatKey)
-  
+
   if (loading) {
     return (
       <div className={cn('text-sm text-muted-foreground animate-pulse', className)}>
@@ -168,7 +202,7 @@ export function BrowserCompatList({ compatKey, className }: { compatKey?: string
       </div>
     )
   }
-  
+
   if (!compat) {
     return (
       <div className={cn('text-sm text-muted-foreground', className)}>
@@ -176,14 +210,14 @@ export function BrowserCompatList({ compatKey, className }: { compatKey?: string
       </div>
     )
   }
-  
+
   return (
     <div className={cn('grid grid-cols-2 sm:grid-cols-3 gap-2', className)}>
       {BROWSER_ORDER.map((browser) => {
         const support = compat[browser]
         const info = BROWSER_INFO[browser]
         const IconComponent = BROWSER_ICONS[browser]
-        
+
         return (
           <div
             key={browser}
@@ -194,11 +228,15 @@ export function BrowserCompatList({ compatKey, className }: { compatKey?: string
                 : 'bg-red-500/10 text-red-700 dark:text-red-300 opacity-70'
             )}
           >
-            <IconComponent className={cn('h-5 w-5', support.supported ? 'text-emerald-600' : 'text-red-600')} />
+            <IconComponent
+              className={cn('h-5 w-5', support.supported ? 'text-emerald-600' : 'text-red-600')}
+            />
             <div className="flex flex-col leading-none gap-0.5">
               <span className="font-medium">{info.name}</span>
               {support.supported ? (
-                <span className="text-xs opacity-75">{support.version ? `v${support.version}+` : 'Supported'}</span>
+                <span className="text-xs opacity-75">
+                  {support.version ? `v${support.version}+` : 'Supported'}
+                </span>
               ) : (
                 <span className="text-xs opacity-75">Not supported</span>
               )}

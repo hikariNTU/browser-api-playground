@@ -16,7 +16,7 @@ export function AudioContextPreview() {
   const gainRef = useRef<GainNode | null>(null)
 
   const hasAudioContext = 'AudioContext' in window
-  
+
   // Check if the linked URL has the same origin (both on github.io)
   const isSameOrigin = (() => {
     try {
@@ -33,7 +33,11 @@ export function AudioContextPreview() {
     return () => {
       // Cleanup on unmount
       if (oscillatorRef.current) {
-        try { oscillatorRef.current.stop() } catch {}
+        try {
+          oscillatorRef.current.stop()
+        } catch {
+          /* ignore already stopped */
+        }
         oscillatorRef.current = null
       }
       if (audioContextRef.current) {
@@ -81,10 +85,7 @@ export function AudioContextPreview() {
     const newFreq = value[0]
     setFrequency(newFreq)
     if (oscillatorRef.current && audioContextRef.current) {
-      oscillatorRef.current.frequency.setValueAtTime(
-        newFreq,
-        audioContextRef.current.currentTime
-      )
+      oscillatorRef.current.frequency.setValueAtTime(newFreq, audioContextRef.current.currentTime)
     }
   }
 

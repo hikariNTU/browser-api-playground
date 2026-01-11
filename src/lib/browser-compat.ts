@@ -109,11 +109,13 @@ export function getBrowserCompat(compatKey: string): BrowserCompatResult | null 
   }
 
   // Data not yet loaded - trigger async load and return null for now
-  fetchBcdData().then(() => {
-    // Cache will be populated on next call
-  }).catch(() => {
-    // Silently fail - UI will show unavailable state
-  })
+  fetchBcdData()
+    .then(() => {
+      // Cache will be populated on next call
+    })
+    .catch(() => {
+      // Silently fail - UI will show unavailable state
+    })
 
   return null
 }
@@ -121,7 +123,9 @@ export function getBrowserCompat(compatKey: string): BrowserCompatResult | null 
 /**
  * Async version that waits for CDN data to load
  */
-export async function getBrowserCompatAsync(compatKey: string): Promise<BrowserCompatResult | null> {
+export async function getBrowserCompatAsync(
+  compatKey: string
+): Promise<BrowserCompatResult | null> {
   // Return cached result if available
   if (compatCache.has(compatKey)) {
     return compatCache.get(compatKey) ?? null

@@ -2,20 +2,28 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+interface SerialPort {
+  open: (options: { baudRate: number }) => Promise<void>
+  close: () => Promise<void>
+  getInfo: () => { usbVendorId?: number; usbProductId?: number }
+}
+
 export function WebSerialPreview() {
-  const [port, setPort] = useState<any | null>(null)
-  const [portInfo, setPortInfo] = useState<{ usbVendorId?: number; usbProductId?: number } | null>(null)
+  const [port, setPort] = useState<SerialPort | null>(null)
+  const [portInfo, setPortInfo] = useState<{ usbVendorId?: number; usbProductId?: number } | null>(
+    null
+  )
   const [status, setStatus] = useState<'disconnected' | 'connected' | 'error'>('disconnected')
   const isSupported = 'serial' in navigator
 
   const handleConnect = async () => {
     if (!isSupported) return
-    
+
     try {
-      // @ts-ignore - Web Serial API not fully typed
-      const selectedPort = await navigator.serial.requestPort()
+      // @ts-expect-error - Web Serial API not fully typed
+      const selectedPort: SerialPort = await navigator.serial.requestPort()
       await selectedPort.open({ baudRate: 9600 })
-      
+
       setPort(selectedPort)
       setPortInfo(selectedPort.getInfo())
       setStatus('connected')
@@ -48,38 +56,50 @@ export function WebSerialPreview() {
   return (
     <div className="space-y-4">
       {status === 'disconnected' && (
-        <Button onClick={handleConnect}>
-          🔌 Connect to Serial Device
-        </Button>
+        <Button onClick={handleConnect}>🔌 Connect to Serial Device</Button>
       )}
-      
+
       {status === 'connected' && (
         <Button variant="destructive" onClick={handleDisconnect}>
           ⏏️ Disconnect
         </Button>
       )}
 
-      <div className={cn(
-        "p-4 rounded-lg flex items-center gap-3",
-        status === 'connected' ? "bg-emerald-500/10" : "bg-muted/50"
-      )}>
-        <div className={cn(
-          "w-3 h-3 rounded-full",
-          status === 'connected' ? "bg-emerald-500" : 
-          status === 'error' ? "bg-red-500" : "bg-muted-foreground/30"
-        )} />
+      <div
+        className={cn(
+          'p-4 rounded-lg flex items-center gap-3',
+          status === 'connected' ? 'bg-emerald-500/10' : 'bg-muted/50'
+        )}
+      >
+        <div
+          className={cn(
+            'w-3 h-3 rounded-full',
+            status === 'connected'
+              ? 'bg-emerald-500'
+              : status === 'error'
+                ? 'bg-red-500'
+                : 'bg-muted-foreground/30'
+          )}
+        />
         <div>
-          <div className={cn(
-            "font-medium",
-            status === 'connected' ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"
-          )}>
-            {status === 'connected' ? 'Connected' : 
-             status === 'error' ? 'Connection Failed' : 'Not Connected'}
+          <div
+            className={cn(
+              'font-medium',
+              status === 'connected'
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-muted-foreground'
+            )}
+          >
+            {status === 'connected'
+              ? 'Connected'
+              : status === 'error'
+                ? 'Connection Failed'
+                : 'Not Connected'}
           </div>
           {portInfo && (
             <div className="text-xs text-muted-foreground">
-              Vendor: {portInfo.usbVendorId?.toString(16) || 'N/A'} | 
-              Product: {portInfo.usbProductId?.toString(16) || 'N/A'}
+              Vendor: {portInfo.usbVendorId?.toString(16) || 'N/A'} | Product:{' '}
+              {portInfo.usbProductId?.toString(16) || 'N/A'}
             </div>
           )}
         </div>

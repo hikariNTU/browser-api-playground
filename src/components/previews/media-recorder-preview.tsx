@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { useDevicePreference } from '@/hooks/use-device-preference'
 
@@ -18,7 +24,9 @@ export function MediaRecorderPreview() {
   const isSupported = 'MediaRecorder' in window
 
   // Keep audio URL ref in sync for cleanup
-  useEffect(() => { audioUrlRef.current = audioUrl }, [audioUrl])
+  useEffect(() => {
+    audioUrlRef.current = audioUrl
+  }, [audioUrl])
 
   useEffect(() => {
     // Request permission and enumerate audio input devices
@@ -27,8 +35,8 @@ export function MediaRecorderPreview() {
         try {
           // Request brief permission to get device labels
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-          stream.getTracks().forEach(t => t.stop())
-          
+          stream.getTracks().forEach((t) => t.stop())
+
           // Now enumerate with labels
           const deviceList = await navigator.mediaDevices.enumerateDevices()
           const audioInputs = deviceList.filter((d) => d.kind === 'audioinput')
@@ -46,11 +54,11 @@ export function MediaRecorderPreview() {
       }
       enumerateWithPermission()
     }
-    
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
-      if (audioUrl) URL.revokeObjectURL(audioUrl)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSupported])
 
   const startRecording = async () => {
@@ -60,28 +68,28 @@ export function MediaRecorderPreview() {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: deviceId ? { deviceId: { exact: deviceId } } : true,
       })
-      
+
       const mediaRecorder = new MediaRecorder(stream)
       mediaRecorderRef.current = mediaRecorder
       chunksRef.current = []
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           chunksRef.current.push(e.data)
         }
       }
-      
+
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
         if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current)
         setAudioUrl(URL.createObjectURL(blob))
         stream.getTracks().forEach((track) => track.stop())
       }
-      
+
       mediaRecorder.start()
       setIsRecording(true)
       setDuration(0)
-      
+
       timerRef.current = window.setInterval(() => {
         setDuration((d) => d + 1)
       }, 1000)
@@ -120,17 +128,16 @@ export function MediaRecorderPreview() {
       {devices.length > 0 && (
         <div className="space-y-2">
           <Label>Microphone</Label>
-          <Select
-            value={selectedDevice}
-            onValueChange={setSelectedDevice}
-            disabled={isRecording}
-          >
+          <Select value={selectedDevice} onValueChange={setSelectedDevice} disabled={isRecording}>
             <SelectTrigger>
               <SelectValue placeholder="Select microphone" />
             </SelectTrigger>
             <SelectContent>
               {devices.map((device, index) => (
-                <SelectItem key={device.deviceId || `device-${index}`} value={device.deviceId || `device-${index}`}>
+                <SelectItem
+                  key={device.deviceId || `device-${index}`}
+                  value={device.deviceId || `device-${index}`}
+                >
                   {device.label || `Microphone ${device.deviceId.slice(0, 8) || index + 1}`}
                 </SelectItem>
               ))}
@@ -149,7 +156,7 @@ export function MediaRecorderPreview() {
             ⏹️ Stop Recording
           </Button>
         )}
-        
+
         {isRecording && (
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
@@ -159,9 +166,7 @@ export function MediaRecorderPreview() {
       </div>
 
       {audioUrl && !isRecording && (
-        <div className={cn(
-          "p-4 bg-muted/50 rounded-lg space-y-3"
-        )}>
+        <div className={cn('p-4 bg-muted/50 rounded-lg space-y-3')}>
           <div className="text-sm font-medium">Recording ({formatTime(duration)})</div>
           <audio src={audioUrl} controls className="w-full" />
         </div>

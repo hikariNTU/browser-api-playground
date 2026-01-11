@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Mic, Volume2, Square } from 'lucide-react'
 import { useDevicePreference } from '@/hooks/use-device-preference'
@@ -9,28 +15,32 @@ import { useDevicePreference } from '@/hooks/use-device-preference'
 export function WebSpeechPreview() {
   const [mode, setMode] = useState<'idle' | 'speaking' | 'listening'>('idle')
   const [transcript, setTranscript] = useState('')
-  
+
   // Plain useState for text and voice (no persistence needed)
   const [text, setText] = useState('Hello! I am the Web Speech API.')
   const [selectedVoice, setSelectedVoice] = useState('')
   // localStorage-persisted device preference for mic
   const [selectedMic, setSelectedMic] = useDevicePreference('preferredMicrophone')
-  
+
   // Local state for browser-specific data
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
   const [microphones, setMicrophones] = useState<MediaDeviceInfo[]>([])
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  
+
   // Only need refs for ephemeral state used in callbacks
   const modeRef = useRef<'idle' | 'speaking' | 'listening'>('idle')
   const voicesRef = useRef<SpeechSynthesisVoice[]>([])
 
   // Keep refs in sync with state (only for ephemeral state)
-  useEffect(() => { modeRef.current = mode }, [mode])
-  useEffect(() => { voicesRef.current = voices }, [voices])
+  useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
+  useEffect(() => {
+    voicesRef.current = voices
+  }, [voices])
 
   const hasTTS = 'speechSynthesis' in window
   const hasASR = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window
@@ -42,8 +52,8 @@ export function WebSpeechPreview() {
         try {
           // Request brief permission to get device labels
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-          stream.getTracks().forEach(t => t.stop())
-          
+          stream.getTracks().forEach((t) => t.stop())
+
           // Now enumerate with labels
           const devices = await navigator.mediaDevices.enumerateDevices()
           const mics = devices.filter((d) => d.kind === 'audioinput')
@@ -64,6 +74,7 @@ export function WebSpeechPreview() {
       }
       enumerateWithPermission()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasASR])
 
   useEffect(() => {
@@ -73,7 +84,7 @@ export function WebSpeechPreview() {
         const availableVoices = speechSynthesis.getVoices()
         setVoices(availableVoices)
         if (availableVoices.length > 0 && !selectedVoice) {
-          const defaultVoice = availableVoices.find(v => v.default) || availableVoices[0]
+          const defaultVoice = availableVoices.find((v) => v.default) || availableVoices[0]
           setSelectedVoice(defaultVoice.name)
         }
       }
@@ -90,7 +101,7 @@ export function WebSpeechPreview() {
         recognitionRef.current.abort()
       }
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop())
+        streamRef.current.getTracks().forEach((t) => t.stop())
       }
       if (hasTTS) {
         speechSynthesis.cancel()
@@ -100,7 +111,7 @@ export function WebSpeechPreview() {
 
   const speak = () => {
     if (!hasTTS || !text) return
-    
+
     speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
     const voice = voicesRef.current.find((v) => v.name === selectedVoice)
@@ -117,7 +128,7 @@ export function WebSpeechPreview() {
     try {
       // Use nuqs state directly
       const deviceId = selectedMic
-      
+
       // Acquire stream with selected device
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: deviceId ? { deviceId: { exact: deviceId } } : true,
@@ -125,7 +136,8 @@ export function WebSpeechPreview() {
       streamRef.current = stream
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      const SpeechRecognitionClass =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
       const recognition = new SpeechRecognitionClass()
       recognitionRef.current = recognition
 
@@ -147,15 +159,15 @@ export function WebSpeechPreview() {
         setMode('idle')
         // Clean up stream
         if (streamRef.current) {
-          streamRef.current.getTracks().forEach(t => t.stop())
+          streamRef.current.getTracks().forEach((t) => t.stop())
           streamRef.current = null
         }
       }
-      
+
       recognition.onerror = () => {
         setMode('idle')
         if (streamRef.current) {
-          streamRef.current.getTracks().forEach(t => t.stop())
+          streamRef.current.getTracks().forEach((t) => t.stop())
           streamRef.current = null
         }
       }
@@ -177,7 +189,7 @@ export function WebSpeechPreview() {
         recognitionRef.current.stop()
       }
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop())
+        streamRef.current.getTracks().forEach((t) => t.stop())
         streamRef.current = null
       }
     }
@@ -200,7 +212,7 @@ export function WebSpeechPreview() {
               disabled={mode !== 'idle'}
             />
           </div>
-          
+
           {voices.length > 0 && (
             <div className="space-y-2">
               <Label>Voice</Label>
@@ -229,17 +241,16 @@ export function WebSpeechPreview() {
       {hasASR && microphones.length > 0 && (
         <div className="space-y-2">
           <Label>Microphone</Label>
-          <Select
-            value={selectedMic}
-            onValueChange={setSelectedMic}
-            disabled={mode !== 'idle'}
-          >
+          <Select value={selectedMic} onValueChange={setSelectedMic} disabled={mode !== 'idle'}>
             <SelectTrigger>
               <SelectValue placeholder="Select microphone" />
             </SelectTrigger>
             <SelectContent>
               {microphones.map((mic, index) => (
-                <SelectItem key={mic.deviceId || `mic-${index}`} value={mic.deviceId || `mic-${index}`}>
+                <SelectItem
+                  key={mic.deviceId || `mic-${index}`}
+                  value={mic.deviceId || `mic-${index}`}
+                >
                   {mic.label || `Microphone ${mic.deviceId.slice(0, 8) || index + 1}`}
                 </SelectItem>
               ))}
@@ -272,18 +283,12 @@ export function WebSpeechPreview() {
         )}
       </div>
 
-      {mode === 'speaking' && (
-        <p className="text-sm animate-pulse">Speaking...</p>
-      )}
+      {mode === 'speaking' && <p className="text-sm animate-pulse">Speaking...</p>}
 
       {mode === 'listening' && (
         <div className="text-center">
           <p className="text-sm animate-pulse mb-2">Listening...</p>
-          {transcript && (
-            <p className="text-sm bg-muted px-3 py-2 rounded-md">
-              "{transcript}"
-            </p>
-          )}
+          {transcript && <p className="text-sm bg-muted px-3 py-2 rounded-md">"{transcript}"</p>}
         </div>
       )}
 

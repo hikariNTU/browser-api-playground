@@ -32,3 +32,15 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format:
 - `fix(media-recorder): resolve device selection bug`
 - `docs: update README with setup instructions`
 - `refactor(hooks): simplify code execution logic`
+
+## Code Quality
+
+After implementing any spec or making code changes, always run:
+
+```bash
+npm run lint    # Check for ESLint issues
+npm run format  # Format code with Prettier
+npm run build   # Verify TypeScript compiles and production build works
+```
+
+Fix any errors before committing.

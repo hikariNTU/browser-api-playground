@@ -2,7 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { useDevicePreference } from '@/hooks/use-device-preference'
 
@@ -18,7 +24,9 @@ export function WebRTCPreview() {
   const isSupported = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices
 
   // Keep stream ref in sync
-  useEffect(() => { streamRef.current = stream }, [stream])
+  useEffect(() => {
+    streamRef.current = stream
+  }, [stream])
 
   useEffect(() => {
     if (isSupported) {
@@ -26,25 +34,25 @@ export function WebRTCPreview() {
       const enumerateWithPermission = async () => {
         try {
           const tempStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-          tempStream.getTracks().forEach(t => t.stop())
+          tempStream.getTracks().forEach((t) => t.stop())
         } catch {
           // Permission denied, try with just video
           try {
             const tempStream = await navigator.mediaDevices.getUserMedia({ video: true })
-            tempStream.getTracks().forEach(t => t.stop())
+            tempStream.getTracks().forEach((t) => t.stop())
           } catch {
             // No permission at all
           }
         }
-        
+
         // Now enumerate with labels
         const deviceList = await navigator.mediaDevices.enumerateDevices()
         const videoInputs = deviceList.filter((d) => d.kind === 'videoinput')
         const audioInputs = deviceList.filter((d) => d.kind === 'audioinput')
-        
+
         setCameras(videoInputs)
         setMicrophones(audioInputs)
-        
+
         if (videoInputs.length > 0 && !selectedCamera) {
           setSelectedCamera(videoInputs[0].deviceId)
         }
@@ -54,12 +62,13 @@ export function WebRTCPreview() {
       }
       enumerateWithPermission()
     }
-    
+
     return () => {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop())
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSupported])
 
   const startCamera = async () => {
@@ -67,19 +76,17 @@ export function WebRTCPreview() {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop())
       }
-      
+
       // Use nuqs state directly
       const cameraId = selectedCamera
       const micId = selectedMic
       const withAudio = includeAudio
-      
+
       const newStream = await navigator.mediaDevices.getUserMedia({
         video: cameraId ? { deviceId: { exact: cameraId } } : true,
-        audio: withAudio 
-          ? (micId ? { deviceId: { exact: micId } } : true)
-          : false,
+        audio: withAudio ? (micId ? { deviceId: { exact: micId } } : true) : false,
       })
-      
+
       setStream(newStream)
       if (videoRef.current) {
         videoRef.current.srcObject = newStream
@@ -112,17 +119,16 @@ export function WebRTCPreview() {
       {cameras.length > 0 && (
         <div className="space-y-2">
           <Label>Camera</Label>
-          <Select
-            value={selectedCamera}
-            onValueChange={setSelectedCamera}
-            disabled={!!stream}
-          >
+          <Select value={selectedCamera} onValueChange={setSelectedCamera} disabled={!!stream}>
             <SelectTrigger>
               <SelectValue placeholder="Select camera" />
             </SelectTrigger>
             <SelectContent>
               {cameras.map((device, index) => (
-                <SelectItem key={device.deviceId || `camera-${index}`} value={device.deviceId || `camera-${index}`}>
+                <SelectItem
+                  key={device.deviceId || `camera-${index}`}
+                  value={device.deviceId || `camera-${index}`}
+                >
                   {device.label || `Camera ${device.deviceId.slice(0, 8) || index + 1}`}
                 </SelectItem>
               ))}
@@ -134,17 +140,16 @@ export function WebRTCPreview() {
       {microphones.length > 0 && (
         <div className="space-y-2">
           <Label>Microphone</Label>
-          <Select
-            value={selectedMic}
-            onValueChange={setSelectedMic}
-            disabled={!!stream}
-          >
+          <Select value={selectedMic} onValueChange={setSelectedMic} disabled={!!stream}>
             <SelectTrigger>
               <SelectValue placeholder="Select microphone" />
             </SelectTrigger>
             <SelectContent>
               {microphones.map((device, index) => (
-                <SelectItem key={device.deviceId || `mic-${index}`} value={device.deviceId || `mic-${index}`}>
+                <SelectItem
+                  key={device.deviceId || `mic-${index}`}
+                  value={device.deviceId || `mic-${index}`}
+                >
                   {device.label || `Microphone ${device.deviceId.slice(0, 8) || index + 1}`}
                 </SelectItem>
               ))}
@@ -166,9 +171,7 @@ export function WebRTCPreview() {
 
       <div className="flex items-center gap-3">
         {!stream ? (
-          <Button onClick={startCamera}>
-            📷 Start Camera
-          </Button>
+          <Button onClick={startCamera}>📷 Start Camera</Button>
         ) : (
           <Button variant="destructive" onClick={stopCamera}>
             ⏹️ Stop Camera
@@ -176,22 +179,16 @@ export function WebRTCPreview() {
         )}
       </div>
 
-      <div className={cn(
-        "relative aspect-video bg-black rounded-lg overflow-hidden",
-        !stream && "flex items-center justify-center"
-      )}>
+      <div
+        className={cn(
+          'relative aspect-video bg-black rounded-lg overflow-hidden',
+          !stream && 'flex items-center justify-center'
+        )}
+      >
         {stream ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full h-full object-cover"
-          />
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
         ) : (
-          <div className="text-muted-foreground text-sm">
-            Camera preview will appear here
-          </div>
+          <div className="text-muted-foreground text-sm">Camera preview will appear here</div>
         )}
       </div>
 
