@@ -15,10 +15,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" alt="React 18" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/TailwindCSS-3-06B6D4?logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
+  <img src="https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="TailwindCSS" />
 </p>
 
 ---
@@ -58,12 +58,11 @@ npm run preview
 
 ## 🛠 Tech Stack
 
-- **Vite** - Build tool
-- **React 18** - UI framework
-- **TailwindCSS** - Styling
+- **Vite** - Build tool (rolldown-vite)
+- **React 19** - UI framework
+- **TailwindCSS 4** - Styling
 - **shadcn/ui** - Component library
 - **TanStack Router** - File-based routing
-- **Jotai** - State management
 - **Monaco Editor** - Code editor (same as VS Code)
 
 ## 📦 Deployment
