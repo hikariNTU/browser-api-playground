@@ -1,7 +1,6 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/eyedropper.js?raw'
 import defaultHtml from './code/eyedropper.html?raw'
-import example1Code from './code/eyedropper-ex1.js?raw'
 import example2Code from './code/eyedropper-ex2.js?raw'
 import example2Html from './code/eyedropper-ex2.html?raw'
 import example3Code from './code/eyedropper-ex3.js?raw'
@@ -25,12 +24,6 @@ export const eyedropperDemo: ApiDemo = {
       description: 'Pick any color from the screen',
       code: defaultCode,
       html: defaultHtml,
-    },
-    {
-      id: 'basic-color-picker',
-      title: 'Basic Color Picker',
-      description: 'Simple color picker with hex output',
-      code: example1Code,
     },
     {
       id: 'build-palette',

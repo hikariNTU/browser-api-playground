@@ -1,6 +1,5 @@
 import type { ApiDemo } from './types'
 import defaultCode from './code/screen-wake-lock.js?raw'
-import example1Code from './code/screen-wake-lock-ex1.js?raw'
 import example2Code from './code/screen-wake-lock-ex2.js?raw'
 import example3Code from './code/screen-wake-lock-ex3.js?raw'
 import example3Html from './code/screen-wake-lock-ex3.html?raw'
@@ -22,12 +21,6 @@ export const screenWakeLockDemo: ApiDemo = {
       title: 'Keep Screen On',
       description: 'Toggle button to keep the screen awake',
       code: defaultCode,
-    },
-    {
-      id: 'basic-wake-lock',
-      title: 'Basic Wake Lock',
-      description: 'Simple request and release',
-      code: example1Code,
     },
     {
       id: 'visibility-change',
