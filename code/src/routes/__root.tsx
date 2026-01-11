@@ -1,5 +1,5 @@
 import { createRootRoute, Link, Outlet, useRouterState } from '@tanstack/react-router'
-import { Suspense, lazy, useState, useRef, useCallback } from 'react'
+import { Suspense, lazy, useState, useRef, useCallback, useEffect } from 'react'
 import { demos } from '@/demos'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { QRShareButton } from '@/components/qr-share-button'
@@ -12,18 +12,64 @@ import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { PanelLeftClose, PanelLeft, MoreHorizontal } from 'lucide-react'
+import { PanelLeftClose, PanelLeft, MoreHorizontal, Loader2, Presentation } from 'lucide-react'
 import { BrowserCompatIcons } from '@/components/browser-compat-icons'
 import logoHorizontal from '@/assets/logo-horizontal.png'
 import iconSquare from '@/assets/icon-square.png'
 
-const TanStackRouterDevtools = import.meta.env.PROD
-  ? () => null
-  : lazy(() =>
-      import('@tanstack/react-router-devtools').then((res) => ({
-        default: res.TanStackRouterDevtools,
-      }))
+// Lazy load slides panel - only loaded when user requests it
+const SlidesPanel = lazy(() => import('@/components/slides-panel'))
+
+// Slides toggle button component
+function SlidesToggle({
+  iconOnly = false,
+  isOpen,
+  onToggle,
+}: {
+  iconOnly?: boolean
+  isOpen: boolean
+  onToggle: () => void
+}) {
+  if (iconOnly) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant={isOpen ? 'secondary' : 'ghost'}
+            size="icon"
+            onClick={onToggle}
+            className="h-8 w-8"
+          >
+            <Presentation className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>Toggle slides (⌘/)</p>
+        </TooltipContent>
+      </Tooltip>
     )
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant={isOpen ? 'secondary' : 'ghost'}
+          size="sm"
+          onClick={onToggle}
+          className="w-full justify-start gap-2"
+        >
+          <Presentation className="h-4 w-4" />
+          <span>Slides</span>
+          <span className="ml-auto text-xs text-muted-foreground">⌘/</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="right">
+        <p>Toggle slides panel</p>
+      </TooltipContent>
+    </Tooltip>
+  )
+}
 
 // Hover popover component for browser compat icons
 function HoverPopover({
@@ -78,6 +124,67 @@ function RootLayout() {
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
   const [isCollapsed, setIsCollapsed] = useState(false)
+
+  // Slides panel state - lazy loaded on first request
+  // Persist open state to localStorage
+  const [slidesRequested, setSlidesRequested] = useState(() => {
+    try {
+      return localStorage.getItem('slides-panel-open') === 'true'
+    } catch {
+      return false
+    }
+  })
+  const [slidesOpen, setSlidesOpen] = useState(() => {
+    try {
+      return localStorage.getItem('slides-panel-open') === 'true'
+    } catch {
+      return false
+    }
+  })
+
+  // Persist slides open state
+  useEffect(() => {
+    try {
+      localStorage.setItem('slides-panel-open', String(slidesOpen))
+    } catch {
+      // Ignore storage errors
+    }
+  }, [slidesOpen])
+
+  // Global keyboard shortcut for slides panel (Cmd/Ctrl + /)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if Cmd (Mac) or Ctrl (Windows/Linux) + / is pressed
+      if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+        // Don't trigger when typing in input fields or Monaco editor
+        const target = e.target as HTMLElement
+        if (
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.closest('.monaco-editor')
+        ) {
+          return
+        }
+
+        e.preventDefault()
+        if (!slidesRequested) {
+          setSlidesRequested(true)
+        }
+        setSlidesOpen((prev) => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [slidesRequested])
+
+  // Handler for slides toggle button
+  const handleSlidesToggle = useCallback(() => {
+    if (!slidesRequested) {
+      setSlidesRequested(true)
+    }
+    setSlidesOpen((prev) => !prev)
+  }, [slidesRequested])
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -348,12 +455,14 @@ function RootLayout() {
             >
               {isCollapsed ? (
                 <div className="flex flex-col items-center gap-2">
+                  <SlidesToggle iconOnly isOpen={slidesOpen} onToggle={handleSlidesToggle} />
                   <FullscreenToggle iconOnly />
                   <ThemeToggle iconOnly />
                   <QRShareButton iconOnly />
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
+                  <SlidesToggle isOpen={slidesOpen} onToggle={handleSlidesToggle} />
                   <FullscreenToggle />
                   <ThemeToggle />
                   <QRShareButton />
@@ -370,9 +479,19 @@ function RootLayout() {
 
         <MobileNotice />
 
-        <Suspense>
-          <TanStackRouterDevtools position="bottom-right" />
-        </Suspense>
+        {/* Slides Panel - lazy loaded on first request */}
+        {slidesRequested && (
+          <Suspense
+            fallback={
+              <div className="fixed bottom-4 right-4 z-50 bg-background border rounded-lg shadow-xl p-4 flex items-center gap-2">
+                <Loader2 className="size-4 animate-spin" />
+                <span className="text-sm">Loading slides...</span>
+              </div>
+            }
+          >
+            <SlidesPanel open={slidesOpen} onClose={() => setSlidesOpen(false)} />
+          </Suspense>
+        )}
       </div>
     </TooltipProvider>
   )

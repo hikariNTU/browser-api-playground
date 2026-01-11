@@ -1,0 +1,159 @@
+/* Slide Markdown Content Styles */
+/* Modern, beautiful styling with dark mode support */
+@reference '../index.css';
+
+.slide-content {
+  color: hsl(var(--foreground));
+}
+
+.slide-content h1 {
+  @apply text-2xl font-bold tracking-tight mb-4 pb-2;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+}
+
+.slide-content h2 {
+  @apply text-xl font-semibold tracking-tight mb-3 mt-6;
+  color: hsl(var(--foreground) / 0.9);
+}
+
+.slide-content h3 {
+  @apply text-lg font-medium mb-2 mt-4;
+  color: hsl(var(--foreground) / 0.85);
+}
+
+.slide-content p {
+  @apply text-sm leading-relaxed mb-3;
+  color: hsl(var(--foreground) / 0.8);
+}
+
+.slide-content strong {
+  @apply font-semibold;
+  color: hsl(var(--foreground));
+}
+
+.slide-content em {
+  @apply italic;
+  color: hsl(var(--foreground) / 0.75);
+}
+
+/* Lists */
+.slide-content ul {
+  @apply my-3 ml-1 space-y-1.5;
+}
+
+.slide-content ol {
+  @apply my-3 ml-1 space-y-1.5 list-decimal list-inside;
+}
+
+.slide-content li {
+  @apply text-sm leading-relaxed pl-1;
+  color: hsl(var(--foreground) / 0.8);
+}
+
+.slide-content ul > li {
+  @apply flex items-start gap-2;
+}
+
+.slide-content ul > li::before {
+  content: "•";
+  @apply font-bold mt-0.5 flex-shrink-0;
+  color: hsl(var(--primary) / 0.7);
+}
+
+/* Links */
+.slide-content a {
+  @apply underline underline-offset-2 transition-colors;
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.4);
+}
+
+.slide-content a:hover {
+  text-decoration-color: hsl(var(--primary) / 0.8);
+  color: hsl(var(--primary) / 0.9);
+}
+
+/* Code */
+.slide-content code {
+  @apply text-xs px-1.5 py-0.5 rounded-md font-mono;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground) / 0.9);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+.slide-content pre {
+  @apply my-4 p-3 rounded-lg overflow-x-auto text-xs;
+  background-color: hsl(var(--muted) / 0.5);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+.slide-content pre code {
+  @apply p-0;
+  background-color: transparent;
+  border: none;
+}
+
+/* Blockquotes */
+.slide-content blockquote {
+  @apply my-4 pl-4 italic py-2 pr-3 rounded-r-md;
+  border-left: 2px solid hsl(var(--primary) / 0.5);
+  color: hsl(var(--foreground) / 0.7);
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+/* Images */
+.slide-content img {
+  @apply rounded-lg shadow-md my-4 max-w-full h-auto;
+  border: 1px solid hsl(var(--border) / 0.3);
+}
+
+/* Videos */
+.slide-content video {
+  @apply rounded-lg shadow-md my-4 max-w-full h-auto;
+  border: 1px solid hsl(var(--border) / 0.3);
+}
+
+/* Tables */
+.slide-content table {
+  @apply w-full my-4 text-sm border-collapse;
+}
+
+.slide-content th {
+  @apply text-left p-2 font-semibold;
+  border-bottom: 2px solid hsl(var(--border));
+  background-color: hsl(var(--muted) / 0.5);
+  color: hsl(var(--foreground) / 0.9);
+}
+
+.slide-content td {
+  @apply p-2;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  color: hsl(var(--foreground) / 0.8);
+}
+
+.slide-content tr:hover td {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+/* Horizontal rule (slide separator in preview) */
+.slide-content hr {
+  @apply my-6 border-none h-px;
+  background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
+}
+
+/* Task lists */
+.slide-content input[type="checkbox"] {
+  @apply mr-2 rounded;
+  border-color: hsl(var(--border));
+  accent-color: hsl(var(--primary));
+}
+
+/* Slide title special styling (first h1) */
+.slide-content > h1:first-child {
+  @apply text-2xl font-bold mb-4 pb-3;
+  border-bottom: 1px solid hsl(var(--primary) / 0.2);
+}
+
+/* Animation for content */
+.slide-content > * {
+  @apply animate-in fade-in-0 duration-300;
+}
