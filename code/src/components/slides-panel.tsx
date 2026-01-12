@@ -877,7 +877,7 @@ export default function SlidesPanel({ open, onClose }: SlidesPanelProps) {
       {/* Invisible overlay during drag/resize to capture mouse events over iframes */}
       {(isDragging || isResizing) && (
         <div
-          className="fixed inset-0 z-[49]"
+          className="fixed inset-0 z-49"
           style={{ cursor: isDragging ? 'grabbing' : 'auto' }}
         />
       )}

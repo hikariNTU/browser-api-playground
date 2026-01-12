@@ -31,7 +31,7 @@ export function IntroPage({ demo }: IntroPageProps) {
   return (
     <div className="h-full flex flex-col overflow-auto">
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
@@ -144,7 +144,7 @@ export function IntroPageSkeleton() {
   return (
     <div className="h-full flex flex-col overflow-auto">
       {/* Header Skeleton */}
-      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ export function IntroPageError({ error, onRetry }: { error?: Error | null; onRet
   return (
     <div className="h-full flex flex-col overflow-auto">
       {/* Header placeholder */}
-      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-20 border-b border-border/50 px-6 py-4 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="flex items-center gap-3">
           <AlertCircle className="h-6 w-6 text-destructive" />
           <h1 className="text-2xl font-semibold tracking-tight text-destructive">
