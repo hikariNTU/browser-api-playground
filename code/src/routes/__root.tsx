@@ -21,6 +21,10 @@ import {
   Loader2,
   Presentation,
   Search,
+  Check,
+  X,
+  FileText,
+  Code2,
 } from 'lucide-react'
 import { BrowserCompatIcons } from '@/components/browser-compat-icons'
 import logoHorizontal from '@/assets/logo-horizontal.png'
@@ -129,10 +133,138 @@ function HoverPopover({
   )
 }
 
+// Collapsed nav item with hover-to-open popover
+function CollapsedNavItem({
+  demo,
+  isDemoActive,
+  isSupported,
+  hasExamples,
+  currentPath,
+}: {
+  demo: (typeof demos)[0]
+  isDemoActive: boolean
+  isSupported: boolean
+  hasExamples: boolean | undefined
+  currentPath: string
+}) {
+  const [open, setOpen] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleMouseEnter = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setOpen(true)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpen(false)
+    }, 150)
+  }, [])
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className={cn(
+            'flex items-center justify-center w-12 h-12 rounded-lg text-sm transition-colors',
+            'hover:bg-accent/50',
+            isDemoActive && 'bg-accent text-accent-foreground'
+          )}
+        >
+          <div className="relative">
+            {/* Rounded square with initials */}
+            <div
+              className={cn(
+                'w-8 h-8 rounded-md flex items-center justify-center text-[10px] font-bold',
+                isDemoActive
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground'
+              )}
+            >
+              {demo.name.slice(0, 2).toUpperCase()}
+            </div>
+            {/* Floating support badge */}
+            <div
+              className={cn(
+                'absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px]',
+                isSupported ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'
+              )}
+            >
+              {isSupported ? '✓' : '✗'}
+            </div>
+          </div>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        side="right"
+        align="start"
+        className="w-56 p-2"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="space-y-1">
+          <p className="font-medium text-sm px-2 py-1">{demo.name}</p>
+          <Link
+            to="/api/$apiId"
+            params={{ apiId: demo.id }}
+            className={cn(
+              'flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+              'hover:bg-accent/50',
+              currentPath === `/api/${demo.id}` && 'bg-accent text-accent-foreground'
+            )}
+          >
+            <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+            Overview
+          </Link>
+          {hasExamples &&
+            demo.examples!.map((example) => (
+              <Link
+                key={example.id}
+                to="/api/$apiId/$exampleId"
+                params={{ apiId: demo.id, exampleId: example.id }}
+                className={cn(
+                  'flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+                  'hover:bg-accent/50',
+                  currentPath === `/api/${demo.id}/${example.id}` &&
+                    'bg-accent text-accent-foreground'
+                )}
+              >
+                <Code2 className="h-3.5 w-3.5 text-muted-foreground" />
+                {example.title}
+              </Link>
+            ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
 function RootLayout() {
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
-  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  // Sidebar collapsed state - persisted to localStorage
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem('sidebar-collapsed') === 'true'
+    } catch {
+      return false
+    }
+  })
+
+  // Persist sidebar collapsed state
+  useEffect(() => {
+    try {
+      localStorage.setItem('sidebar-collapsed', String(isCollapsed))
+    } catch {
+      // Ignore storage errors
+    }
+  }, [isCollapsed])
 
   // Slides panel state - lazy loaded on first request
   // Persist open state to localStorage
@@ -344,13 +476,17 @@ function RootLayout() {
                             <Badge
                               variant={isSupported ? 'default' : 'secondary'}
                               className={cn(
-                                'text-[10px] px-1.5 py-0 cursor-pointer',
+                                'size-5 p-0 cursor-pointer',
                                 isSupported
                                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                                   : 'bg-muted text-muted-foreground'
                               )}
                             >
-                              {isSupported ? '✓' : '✗'}
+                              {isSupported ? (
+                                <Check className="size-3" />
+                              ) : (
+                                <X className="size-3" />
+                              )}
                             </Badge>
                           </HoverPopover>
                         </Link>
@@ -416,87 +552,14 @@ function RootLayout() {
                       const hasExamples = demo.examples && demo.examples.length > 0
 
                       return (
-                        <Popover key={demo.id}>
-                          <PopoverTrigger asChild>
-                            <button
-                              className={cn(
-                                'flex items-center justify-center w-12 h-12 rounded-lg text-sm transition-colors',
-                                'hover:bg-accent/50',
-                                isDemoActive && 'bg-accent text-accent-foreground'
-                              )}
-                            >
-                              <div className="relative">
-                                {/* Rounded square with initials */}
-                                <div
-                                  className={cn(
-                                    'w-8 h-8 rounded-md flex items-center justify-center text-[10px] font-bold',
-                                    isDemoActive
-                                      ? 'bg-primary text-primary-foreground'
-                                      : 'bg-muted text-muted-foreground'
-                                  )}
-                                >
-                                  {demo.name.slice(0, 2).toUpperCase()}
-                                </div>
-                                {/* Floating support badge */}
-                                <div
-                                  className={cn(
-                                    'absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px]',
-                                    isSupported
-                                      ? 'bg-emerald-500 text-white'
-                                      : 'bg-red-500 text-white'
-                                  )}
-                                >
-                                  {isSupported ? '✓' : '✗'}
-                                </div>
-                              </div>
-                            </button>
-                          </PopoverTrigger>
-                          <PopoverContent side="right" align="start" className="w-56 p-2">
-                            <div className="space-y-1">
-                              <p className="font-medium text-sm px-2 py-1">{demo.name}</p>
-                              <Link
-                                to="/api/$apiId"
-                                params={{ apiId: demo.id }}
-                                className={cn(
-                                  'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
-                                  'hover:bg-accent/50',
-                                  currentPath === `/api/${demo.id}` &&
-                                    'bg-accent text-accent-foreground'
-                                )}
-                              >
-                                Overview
-                              </Link>
-                              <Link
-                                to="/api/$apiId/$exampleId"
-                                params={{ apiId: demo.id, exampleId: 'default' }}
-                                className={cn(
-                                  'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
-                                  'hover:bg-accent/50',
-                                  currentPath === `/api/${demo.id}/default` &&
-                                    'bg-accent text-accent-foreground'
-                                )}
-                              >
-                                Default Demo
-                              </Link>
-                              {hasExamples &&
-                                demo.examples!.map((example) => (
-                                  <Link
-                                    key={example.id}
-                                    to="/api/$apiId/$exampleId"
-                                    params={{ apiId: demo.id, exampleId: example.id }}
-                                    className={cn(
-                                      'flex items-center px-2 py-1.5 rounded-md text-sm transition-colors',
-                                      'hover:bg-accent/50',
-                                      currentPath === `/api/${demo.id}/${example.id}` &&
-                                        'bg-accent text-accent-foreground'
-                                    )}
-                                  >
-                                    {example.title}
-                                  </Link>
-                                ))}
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+                        <CollapsedNavItem
+                          key={demo.id}
+                          demo={demo}
+                          isDemoActive={isDemoActive}
+                          isSupported={isSupported}
+                          hasExamples={hasExamples}
+                          currentPath={currentPath}
+                        />
                       )
                     })}
                   </nav>
